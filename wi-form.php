@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WP Form Calculator
+ * Plugin Name: WiForm
  * Description: WP Form Calculator
  * Version: 0.1.0
  * Author: Serhii Hryshyn
