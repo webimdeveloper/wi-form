@@ -20,7 +20,6 @@ define( 'WIFORM_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * Load the main plugin class.
- * (We will create this file in the next step.)
  */
 require_once WIFORM_PATH . 'includes/class-wiform-plugin.php';
 
@@ -32,3 +31,16 @@ function wiform_bootstrap() {
 	$plugin->register();
 }
 add_action( 'plugins_loaded', 'wiform_bootstrap' );
+
+/**
+ * DEBUG: simple shortcode to verify plugin is actually loading.
+ *
+ * Usage: [wiform_test]
+ * Expected output: "WiForm test shortcode is working."
+ */
+add_shortcode(
+	'wiform_test',
+	function () {
+		return 'WiForm test shortcode is working.';
+	}
+);
