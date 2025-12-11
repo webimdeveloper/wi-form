@@ -74,18 +74,26 @@ class WiForm_Plugin {
 	 * Register frontend CSS/JS.
 	 */
 	public function register_assets(): void {
+		$style_path = WIFORM_PATH . 'assets/dist/wiform-frontend.css';
+		$style_url  = WIFORM_URL . 'assets/dist/wiform-frontend.css';
+		$style_ver  = file_exists( $style_path ) ? filemtime( $style_path ) : '0.1.0';
+
+		$script_path = WIFORM_PATH . 'assets/dist/wiform-frontend.js';
+		$script_url  = WIFORM_URL . 'assets/dist/wiform-frontend.js';
+		$script_ver  = file_exists( $script_path ) ? filemtime( $script_path ) : '0.1.0';
+
 		wp_register_style(
-			'wiform-trademark',
-			WIFORM_URL . 'assets/css/trademark-calculator.css',
+			'wiform-frontend',
+			$style_url,
 			[],
-			'0.1.0'
+			$style_ver
 		);
 
 		wp_register_script(
-			'wiform-trademark',
-			WIFORM_URL . 'assets/js/trademark-calculator.js',
-			[ 'jquery' ],
-			'0.1.0',
+			'wiform-frontend',
+			$script_url,
+			[],
+			$script_ver,
 			true
 		);
 	}
@@ -96,8 +104,8 @@ class WiForm_Plugin {
 	public function render_trademark_shortcode( $atts = [], $content = '' ): string {
 
 		// Load assets only when shortcode is used.
-		wp_enqueue_style( 'wiform-trademark' );
-		wp_enqueue_script( 'wiform-trademark' );
+		wp_enqueue_style( 'wiform-frontend' );
+		wp_enqueue_script( 'wiform-frontend' );
 
 		// Default settings (later we will override from admin settings).
 		$settings = [
@@ -120,82 +128,22 @@ class WiForm_Plugin {
 		];
 
 		// Make settings available to JS as window.wiformTrademarkSettings
-		wp_localize_script( 'wiform-trademark', 'wiformTrademarkSettings', $settings );
+		wp_localize_script( 'wiform-frontend', 'wiformTrademarkSettings', $settings );
+
+		$config_json = wp_json_encode( $settings );
+		$instance_id = wp_unique_id( 'wiform-' );
 
 		ob_start();
 		?>
 
-		<div class="wiform-trademark-calculator" data-wiform-calculator="trademark">
-
-			<!-- Customer type -->
-			<div class="wiform-field wiform-field--customer-type">
-				<label class="wiform-label"><?php esc_html_e( 'Customer type', 'wiform' ); ?></label>
-				<div class="wiform-options">
-					<label>
-						<input type="radio" name="wiform_customer_type" value="company" checked>
-						<span><?php esc_html_e( 'Company', 'wiform' ); ?></span>
-					</label>
-					<label>
-						<input type="radio" name="wiform_customer_type" value="private">
-						<span><?php esc_html_e( 'Private', 'wiform' ); ?></span>
-					</label>
-				</div>
-			</div>
-
-			<!-- Trademark rows (Repeater) -->
-			<div class="wiform-trademarks">
-				<div class="wiform-trademark-row" data-wiform-row>
-					<div class="wiform-field">
-						<label>
-							<?php esc_html_e( 'Number of classes for this trademark', 'wiform' ); ?>
-							<input
-								type="number"
-								name="wiform_classes[]"
-								min="1"
-								max="100"
-								value="1"
-								class="wiform-input-classes"
-							>
-						</label>
-					</div>
-					<button type="button" class="wiform-remove-row" style="display:none;">
-						<?php esc_html_e( 'Remove', 'wiform' ); ?>
-					</button>
-				</div>
-			</div>
-
-			<button type="button" class="wiform-add-row">
-				<?php esc_html_e( 'Add another trademark', 'wiform' ); ?>
-			</button>
-
-			<!-- Email -->
-			<div class="wiform-field wiform-field--email">
-				<label>
-					<?php esc_html_e( 'Your email to receive a proposal', 'wiform' ); ?>
-					<input
-						type="email"
-						name="wiform_email"
-						class="wiform-input-email"
-						placeholder="<?php esc_attr_e( 'you@example.com', 'wiform' ); ?>"
-					>
-				</label>
-			</div>
-
-			<!-- Calculate -->
-			<button type="button" class="wiform-calculate">
-				<?php esc_html_e( 'Calculate', 'wiform' ); ?>
-			</button>
-
-			<!-- Results -->
-			<div class="wiform-results" style="display:none;">
-				<h3><?php esc_html_e( 'Calculation results', 'wiform' ); ?></h3>
-				<p class="wiform-result-trademarks"></p>
-				<p class="wiform-result-classes"></p>
-				<p class="wiform-result-state-duty"></p>
-				<p class="wiform-result-service"></p>
-				<p class="wiform-result-total"></p>
-			</div>
-
+		<div
+			id="<?php echo esc_attr( $instance_id ); ?>"
+			class="wiform-root"
+			data-wiform-id="<?php echo esc_attr( $instance_id ); ?>"
+			data-wiform-config="<?php echo esc_attr( $config_json ); ?>"
+			data-wiform-calculator="trademark"
+		>
+			<noscript><?php esc_html_e( 'Please enable JavaScript to use the WiForm calculator.', 'wiform' ); ?></noscript>
 		</div>
 
 		<?php

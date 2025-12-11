@@ -1,0 +1,43 @@
+.wi_summary {
+  display: grid;
+  gap: var(--wi_space-sm);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.wi_card {
+  grid-column: span 12;
+  border: 1px solid var(--wi_color-border);
+  border-radius: var(--wi_radius-md);
+  padding: var(--wi_space-md);
+  background: var(--wi_color-surface-muted);
+}
+
+.wi_card__title {
+  margin: 0 0 var(--wi_space-xs);
+  font-weight: var(--wi_font-weight-semibold);
+  color: var(--wi_color-text);
+}
+
+.wi_stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--wi_space-xs) 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--wi_color-border) 60%, transparent);
+}
+
+.wi_stat:last-child {
+  border-bottom: none;
+}
+
+.wi_stat__label {
+  color: var(--wi_color-text-muted);
+}
+
+.wi_stat__value {
+  font-weight: var(--wi_font-weight-semibold);
+  color: var(--wi_color-text);
+}
+
+/* Both totals and notes stretch full width for now */
+

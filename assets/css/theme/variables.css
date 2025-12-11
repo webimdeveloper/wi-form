@@ -1,0 +1,68 @@
+:root {
+  /* Color palette */
+  --wi_color-surface: #ffffff;
+  --wi_color-surface-muted: #f7f9fb;
+  --wi_color-border: #d7dee8;
+  --wi_color-border-strong: #b7c3d4;
+  --wi_color-text: #1f2933;
+  --wi_color-text-muted: #52606d;
+  --wi_color-primary: #2563eb;
+  --wi_color-primary-strong: #1d4ed8;
+  --wi_color-accent: #10b981;
+  --wi_color-success: #15803d;
+  --wi_color-warn: #b45309;
+  --wi_color-error: #b91c1c;
+  --wi_color-focus: #2563eb;
+  --wi_color-shadow: rgba(31, 41, 51, 0.08);
+
+  /* Spacing scale */
+  --wi_space-2xs: 0.25rem;
+  --wi_space-xs: 0.5rem;
+  --wi_space-sm: 0.75rem;
+  --wi_space-md: 1rem;
+  --wi_space-lg: 1.5rem;
+  --wi_space-xl: 2rem;
+  --wi_space-2xl: 3rem;
+  --wi_space-3xl: 4rem;
+
+  /* Typography */
+  --wi_font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --wi_font-weight-regular: 400;
+  --wi_font-weight-medium: 500;
+  --wi_font-weight-semibold: 600;
+  --wi_font-size-base: clamp(15px, 1.5vw, 16px);
+  --wi_line-height-base: 1.6;
+  --wi_font-size-sm: 0.9375rem;
+  --wi_font-size-lg: 1.0625rem;
+  --wi_font-size-h3: clamp(1.125rem, 2vw, 1.25rem);
+  --wi_font-size-h2: clamp(1.25rem, 2.4vw, 1.375rem);
+  --wi_font-size-h1: clamp(1.375rem, 2.6vw, 1.5rem);
+
+  /* Radii and shadows */
+  --wi_radius-sm: 6px;
+  --wi_radius-md: 10px;
+  --wi_radius-lg: 14px;
+  --wi_shadow-sm: 0 4px 12px var(--wi_color-shadow);
+
+  /* Transitions */
+  --wi_transition-fast: 120ms ease;
+  --wi_transition-base: 180ms ease;
+}
+
+.wi_theme-dark {
+  --wi_color-surface: #0f1720;
+  --wi_color-surface-muted: #111827;
+  --wi_color-border: #1f2933;
+  --wi_color-border-strong: #2b3a47;
+  --wi_color-text: #e5eef5;
+  --wi_color-text-muted: #b7c2cc;
+  --wi_color-primary: #60a5fa;
+  --wi_color-primary-strong: #3b82f6;
+  --wi_color-accent: #34d399;
+  --wi_color-success: #22c55e;
+  --wi_color-warn: #f59e0b;
+  --wi_color-error: #ef4444;
+  --wi_color-focus: #60a5fa;
+  --wi_color-shadow: rgba(0, 0, 0, 0.35);
+}
+

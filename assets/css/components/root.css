@@ -1,0 +1,26 @@
+.wi_shell {
+  border: 1px solid var(--wi_color-border);
+  border-radius: var(--wi_radius-md);
+  padding: var(--wi_space-lg);
+  background: var(--wi_color-surface);
+  box-shadow: var(--wi_shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--wi_space-lg);
+}
+
+.wi_section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wi_space-sm);
+}
+
+.wi_section__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--wi_space-xs);
+  font-size: var(--wi_font-size-h3);
+  font-weight: var(--wi_font-weight-semibold);
+  color: var(--wi_color-text);
+}
+

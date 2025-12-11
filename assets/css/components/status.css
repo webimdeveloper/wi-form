@@ -1,0 +1,29 @@
+.wi_status {
+  padding: var(--wi_space-sm);
+  border-radius: var(--wi_radius-sm);
+  border: 1px solid var(--wi_color-border);
+  background: var(--wi_color-surface-muted);
+  color: var(--wi_color-text);
+  display: flex;
+  align-items: center;
+  gap: var(--wi_space-xs);
+}
+
+.wi_status--success {
+  border-color: color-mix(in srgb, var(--wi_color-success) 40%, var(--wi_color-border));
+  background: color-mix(in srgb, var(--wi_color-success) 10%, var(--wi_color-surface-muted));
+  color: var(--wi_color-success);
+}
+
+.wi_status--warn {
+  border-color: color-mix(in srgb, var(--wi_color-warn) 40%, var(--wi_color-border));
+  background: color-mix(in srgb, var(--wi_color-warn) 10%, var(--wi_color-surface-muted));
+  color: var(--wi_color-warn);
+}
+
+.wi_status--error {
+  border-color: color-mix(in srgb, var(--wi_color-error) 40%, var(--wi_color-border));
+  background: color-mix(in srgb, var(--wi_color-error) 10%, var(--wi_color-surface-muted));
+  color: var(--wi_color-error);
+}
+

@@ -1,0 +1,116 @@
+.wi_root,
+.wi_root * {
+  box-sizing: border-box;
+}
+
+.wi_root {
+  font-family: var(--wi_font-family);
+  color: var(--wi_color-text);
+  background: var(--wi_color-surface);
+  line-height: var(--wi_line-height-base);
+  margin: 0;
+  padding: 0;
+}
+
+.wi_root a {
+  color: var(--wi_color-primary);
+  text-decoration: none;
+  transition: color var(--wi_transition-base);
+}
+
+.wi_root a:hover {
+  color: var(--wi_color-primary-strong);
+}
+
+.wi_root h1,
+.wi_root h2,
+.wi_root h3,
+.wi_root h4,
+.wi_root h5,
+.wi_root h6 {
+  margin: 0 0 var(--wi_space-sm);
+  font-weight: var(--wi_font-weight-semibold);
+  line-height: 1.3;
+  color: var(--wi_color-text);
+}
+
+.wi_root h1 {
+  font-size: var(--wi_font-size-h1);
+}
+
+.wi_root h2 {
+  font-size: var(--wi_font-size-h2);
+}
+
+.wi_root h3 {
+  font-size: var(--wi_font-size-h3);
+}
+
+.wi_root p {
+  margin: 0 0 var(--wi_space-sm);
+  color: var(--wi_color-text-muted);
+}
+
+.wi_root ul,
+.wi_root ol {
+  margin: 0 0 var(--wi_space-sm) var(--wi_space-md);
+  padding: 0;
+}
+
+.wi_root button,
+.wi_root input,
+.wi_root select,
+.wi_root textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.wi_root button {
+  cursor: pointer;
+  border: 1px solid var(--wi_color-border);
+  background: var(--wi_color-surface-muted);
+  padding: var(--wi_space-xs) var(--wi_space-sm);
+  border-radius: var(--wi_radius-sm);
+  transition: background var(--wi_transition-fast), border-color var(--wi_transition-fast), transform var(--wi_transition-fast);
+}
+
+.wi_root button:hover {
+  background: var(--wi_color-border);
+}
+
+.wi_root button:active {
+  transform: translateY(1px);
+}
+
+.wi_root input[type="number"],
+.wi_root input[type="email"],
+.wi_root input[type="text"] {
+  width: 100%;
+  padding: var(--wi_space-xs) var(--wi_space-sm);
+  border: 1px solid var(--wi_color-border);
+  border-radius: var(--wi_radius-sm);
+  background: var(--wi_color-surface);
+  color: var(--wi_color-text);
+  transition: border-color var(--wi_transition-fast), box-shadow var(--wi_transition-fast);
+}
+
+.wi_root input:focus,
+.wi_root select:focus,
+.wi_root textarea:focus {
+  outline: none;
+  border-color: var(--wi_color-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--wi_color-focus) 25%, transparent);
+}
+
+.wi_root .wi_grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--wi_space-md);
+}
+
+@media (max-width: 768px) {
+  .wi_root .wi_grid {
+    grid-template-columns: 1fr;
+  }
+}
+
