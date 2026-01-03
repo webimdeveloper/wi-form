@@ -92,7 +92,7 @@ function handleEmailUpdate(nextEmail) {
     />
 
     <div class="wi_section">
-      <h2 class="wi_section__heading">Inputs (structure only)</h2>
+      <h2 class="wi_section__heading">Inputs</h2>
       <WiFormInputs
         :mode="state.mode"
         :rows="state.rows"
