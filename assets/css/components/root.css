@@ -24,3 +24,17 @@
   color: var(--wi_color-text);
 }
 
+/* Step Container */
+.wi_step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wi_space-md);
+}
+
+.wi_step__actions {
+  display: flex;
+  gap: var(--wi_space-md);
+  margin-top: var(--wi_space-md);
+  flex-wrap: wrap;
+}
+

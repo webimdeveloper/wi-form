@@ -3,8 +3,8 @@ import { computed } from 'vue';
 
 const props = defineProps({
   mode: {
-    type: String,
-    default: 'company',
+    type: [String, null],
+    default: null, // no default; must be explicitly selected
   },
   rows: {
     type: Array,
@@ -13,6 +13,10 @@ const props = defineProps({
   config: {
     type: Object,
     default: () => ({}),
+  },
+  showError: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -54,25 +58,31 @@ function updateClasses(id, value) {
   <div class="wi_inputs">
     <div class="wi_inputs__panel wi_inputs__panel--left">
       <div class="wi_inputs__group">
-        <span class="wi_row__label">Customer type</span>
-        <div class="wi_actions">
-          <button
-            type="button"
-            class="wi_chip"
-            :class="{ 'wi_chip--active': mode === 'company' }"
-            @click="setMode('company')"
-          >
-            Company
-          </button>
-          <button
-            type="button"
-            class="wi_chip"
-            :class="{ 'wi_chip--active': mode === 'private' }"
-            @click="setMode('private')"
-          >
-            Private
-          </button>
-        </div>
+        <fieldset class="wi_inputs__fieldset" :class="{ 'wi_error': showError }">
+          <legend class="wi_row__label">Customer type <span class="wi_required" aria-label="required">*</span></legend>
+          <div class="wi_inputs__radio-group">
+            <label class="wi_inputs__radio-label">
+              <input
+                type="radio"
+                name="customer_type"
+                value="company"
+                :checked="mode === 'company'"
+                @change="setMode('company')"
+              />
+              <span>Company</span>
+            </label>
+            <label class="wi_inputs__radio-label">
+              <input
+                type="radio"
+                name="customer_type"
+                value="private"
+                :checked="mode === 'private'"
+                @change="setMode('private')"
+              />
+              <span>Private</span>
+            </label>
+          </div>
+        </fieldset>
       </div>
 
       <div class="wi_inputs__group">

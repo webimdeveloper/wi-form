@@ -1,4 +1,8 @@
 (function ($) {
+  // DEPRECATED: legacy jQuery implementation kept for parity testing.
+  // New Vue-based implementation lives in `assets/js/frontend/*` and
+  // calculations have been moved to `assets/js/frontend/lib/calculations/trademark.js`.
+  // Remove this file after verification.
   $(function () {
     var $root = $('.wiform-trademark-calculator');
 

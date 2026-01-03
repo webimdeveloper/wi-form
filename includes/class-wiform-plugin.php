@@ -108,7 +108,7 @@ class WiForm_Plugin {
 		wp_enqueue_script( 'wiform-frontend' );
 
 		// Default settings (later we will override from admin settings).
-		$settings = [
+		$defaults = [
 			'buc_to_uzs' => 412000,
 			'usd_to_uzs' => 12000,
 			'company'    => [
@@ -126,6 +126,33 @@ class WiForm_Plugin {
 				'service_per_tm_usd' => 200.0,
 			],
 		];
+
+		// Allow shortcode attributes: 'redirectUrl' and an optional JSON 'settings' to override defaults.
+		$atts = shortcode_atts(
+			[
+				'redirectUrl' => '',
+				'settings'    => '',
+			],
+			$atts,
+			'wi_form_trademark'
+		);
+
+		$settings = $defaults;
+
+		// If the user passed a JSON settings payload via shortcode attribute, merge it.
+		if ( ! empty( $atts['settings'] ) ) {
+			$decoded = json_decode( wp_unslash( $atts['settings'] ), true );
+			if ( is_array( $decoded ) ) {
+				$settings = array_replace_recursive( $settings, $decoded );
+			}
+		}
+
+		// redirectUrl may be provided as an attribute; otherwise use a sensible default.
+		if ( ! empty( $atts['redirectUrl'] ) ) {
+			$settings['redirectUrl'] = esc_url_raw( $atts['redirectUrl'] );
+		} else {
+			$settings['redirectUrl'] = 'https://example.com/next';
+		}
 
 		// Make settings available to JS as window.wiformTrademarkSettings
 		wp_localize_script( 'wiform-frontend', 'wiformTrademarkSettings', $settings );

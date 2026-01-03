@@ -102,3 +102,76 @@
   }
 }
 
+/* Fieldset and Radio Button Styles */
+.wi_inputs__fieldset {
+  border: 1px solid var(--wi_color-border);
+  border-radius: var(--wi_radius-md);
+  padding: var(--wi_space-md);
+  background: var(--wi_color-surface-muted);
+  transition: border-color var(--wi_transition-fast), background-color var(--wi_transition-fast);
+}
+
+.wi_inputs__fieldset legend {
+  padding: 0 var(--wi_space-xs);
+  font-weight: var(--wi_font-weight-medium);
+  color: var(--wi_color-text);
+  margin-left: calc(var(--wi_space-xs) * -1);
+}
+
+.wi_inputs__radio-group {
+  display: flex;
+  gap: var(--wi_space-md);
+  flex-wrap: wrap;
+  margin-top: var(--wi_space-sm);
+}
+
+.wi_inputs__radio-label {
+  display: flex;
+  align-items: center;
+  gap: var(--wi_space-xs);
+  cursor: pointer;
+  user-select: none;
+  font-weight: var(--wi_font-weight-regular);
+  color: var(--wi_color-text);
+  transition: color var(--wi_transition-fast);
+}
+
+.wi_inputs__radio-label input[type="radio"] {
+  cursor: pointer;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--wi_color-primary);
+}
+
+.wi_inputs__radio-label:hover {
+  color: var(--wi_color-primary);
+}
+
+.wi_inputs__radio-label input[type="radio"]:checked + span {
+  font-weight: var(--wi_font-weight-medium);
+  color: var(--wi_color-primary);
+}
+
+/* Error State */
+.wi_inputs__fieldset.wi_error {
+  border: 2px solid var(--wi_color-error);
+  background-color: color-mix(in srgb, var(--wi_color-error) 8%, var(--wi_color-surface-muted));
+  padding: var(--wi_space-md);
+}
+
+.wi_inputs__fieldset.wi_error legend {
+  color: var(--wi_color-error);
+  font-weight: var(--wi_font-weight-semibold);
+}
+
+.wi_required {
+  color: var(--wi_color-error);
+  font-weight: var(--wi_font-weight-semibold);
+  margin-left: var(--wi_space-xs);
+}
+
+.wi_inputs__fieldset.wi_error .wi_required {
+  color: var(--wi_color-error);
+}
+
