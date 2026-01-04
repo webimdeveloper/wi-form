@@ -40,12 +40,13 @@ function handleNext() {
 function handleBack() {
   currentStep.value = 0;
 }
+
 </script>
 
 <template>
   <div class="wi_root wi_shell" :data-instance-id="instanceId">
     <div v-if="currentStep === 0" class="wi_section">
-      <h2 class="wi_section__heading">Inputs</h2>
+      <!--<h2 class="wi_section__heading">Select applicant type below:</h2>-->
       <FormStep
         :formState="formState"
         :config="config"
@@ -56,7 +57,7 @@ function handleBack() {
     </div>
 
     <div v-else class="wi_section">
-      <h2 class="wi_section__heading">Results</h2>
+      <!-- <h2 class="wi_section__heading">Results</h2> -->
       <ResultStep
         :results="results"
         :redirectUrl="config?.redirectUrl"

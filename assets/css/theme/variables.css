@@ -1,48 +1,73 @@
 :root {
   /* Color palette */
-  --wi_color-surface: #ffffff;
+  --wi_color-surface: #F9F9F9;
   --wi_color-surface-muted: #f7f9fb;
-  --wi_color-border: #d7dee8;
+  --wi_color-border: #dedede;
   --wi_color-border-strong: #b7c3d4;
-  --wi_color-text: #1f2933;
+  --wi_color-text: #383838;
   --wi_color-text-muted: #52606d;
-  --wi_color-primary: #2563eb;
-  --wi_color-primary-strong: #1d4ed8;
+  --wi_color-primary: #E7A529;
+  --wi_color-primary-strong: #e19b1b;
   --wi_color-accent: #10b981;
   --wi_color-success: #15803d;
-  --wi_color-warn: #b45309;
-  --wi_color-error: #b91c1c;
-  --wi_color-focus: #2563eb;
+  --wi_color-warn: #e75e29;
+  --wi_color-error: #e75e29;
+  --wi_color-focus: #E7A529;
   --wi_color-shadow: rgba(31, 41, 51, 0.08);
+  --wi_color-border-input: #BCBFCE; 
 
-  /* Spacing scale */
-  --wi_space-2xs: 0.25rem;
-  --wi_space-xs: 0.5rem;
-  --wi_space-sm: 0.75rem;
-  --wi_space-md: 1rem;
-  --wi_space-lg: 1.5rem;
-  --wi_space-xl: 2rem;
-  --wi_space-2xl: 3rem;
-  --wi_space-3xl: 4rem;
+  --wi_color-border-secondary: #696969;
+
+  /* The Atomic Base (8px) */
+  --wi_step: 0.5rem;
+
+  /* Multiplier Scale */
+  --wi_space-3xs: calc(var(--wi_step) * 0.25); /* 2px */
+  --wi_space-2xs: calc(var(--wi_step) * 0.5); /* 4px */
+  --wi_space-xs: var(--wi_step); /* 8px */
+  --wi_space-sm: calc(var(--wi_step) * 1.5); /* 12px */
+  --wi_space-md: calc(var(--wi_step) * 2); /* 16px */
+  --wi_space-lg: calc(var(--wi_step) * 3); /* 24px (Step 3) */
+  --wi_space-xl: calc(var(--wi_step) * 4); /* 32px */
+  --wi_space-2xl: calc(var(--wi_step) * 6); /* 48px (Step 6 - Target ~50) */
+  --wi_space-3xl: calc(var(--wi_step) * 8); /* 64px */
+  --wi_space-4xl: calc(var(--wi_step) * 10); /* 80px (Step 10 - Target 80) */
+
+  /* Vertical: Fluidly scales from 24px to 48px */
+  --wi_padding-block: clamp(
+    var(--wi_space-xl),
+    0.5rem + 3.5vi,
+    var(--wi_space-2xl)
+  );
+
+  /* Horizontal: scales 24px (lg) to 80px (4xl) */
+  --wi_padding-inline: clamp(
+    var(--wi_space-xl),
+    -0.5rem + 10vi,
+    var(--wi_space-4xl)
+  );
 
   /* Typography */
-  --wi_font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --wi_font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
   --wi_font-weight-regular: 400;
   --wi_font-weight-medium: 500;
   --wi_font-weight-semibold: 600;
-  --wi_font-size-base: clamp(15px, 1.5vw, 16px);
+  --wi_font-size-base: clamp(15px, 1rem, 1.6vw);
   --wi_line-height-base: 1.6;
+  --wi_font-size-xs: 0.75rem;
   --wi_font-size-sm: 0.9375rem;
   --wi_font-size-lg: 1.0625rem;
-  --wi_font-size-h3: clamp(1.125rem, 2vw, 1.25rem);
+  --wi_font-size-h3: clamp(1.125rem, 2.1vw, 1.25rem);
   --wi_font-size-h2: clamp(1.25rem, 2.4vw, 1.375rem);
   --wi_font-size-h1: clamp(1.375rem, 2.6vw, 1.5rem);
 
   /* Radii and shadows */
+  --wi_radius-0: 0;
   --wi_radius-sm: 6px;
   --wi_radius-md: 10px;
   --wi_radius-lg: 14px;
-  --wi_shadow-sm: 0 4px 12px var(--wi_color-shadow);
+  /* --wi_shadow-sm: 0 4px 12px var(--wi_color-shadow); */
 
   /* Transitions */
   --wi_transition-fast: 120ms ease;
@@ -65,4 +90,3 @@
   --wi_color-focus: #60a5fa;
   --wi_color-shadow: rgba(0, 0, 0, 0.35);
 }
-

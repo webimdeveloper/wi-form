@@ -1,0 +1,45 @@
+/* Localized button styles scoped under .wi_root to avoid leaking into WP admin/theme */
+.wi_root .wi_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--wi_space-sm) var(--wi_space-md);
+  border-radius: var(--wi_radius-md);
+  font-weight: var(--wi_font-weight-medium);
+  text-decoration: none;
+  transition: background-color var(--wi_transition-fast), border-color var(--wi_transition-fast), color var(--wi_transition-fast), box-shadow var(--wi_transition-fast);
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.wi_root .wi_btn--primary {
+  background-color: var(--wi_color-primary);
+  color: white;
+  border-color: var(--wi_color-primary);
+}
+
+.wi_root .wi_btn--primary:hover {
+  background-color: var(--wi_color-primary-strong);
+  border-color: var(--wi_color-primary-strong);
+}
+
+.wi_root .wi_btn--primary:active {
+  transform: translateY(1px);
+}
+
+.wi_root .wi_btn--secondary {
+  background-color: var(--wi_color-surface-muted);
+  color: var(--wi_color-text);
+  border-color: var(--wi_color-border);
+}
+
+.wi_root .wi_btn--secondary:hover {
+  background-color: var(--wi_color-border);
+}
+
+.wi_root .wi_btn[disabled],
+.wi_root .wi_btn.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

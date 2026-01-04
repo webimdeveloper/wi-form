@@ -69,7 +69,7 @@ function onNext() {
     </WiFormInputs>
 
     <div class="wi_step__actions">
-      <button class="wi_btn wi_btn--primary" type="button" @click="onNext">Next</button>
+      <button class="wi_btn wi_btn--primary wi_btn-prm-100" type="button" @click="onNext">Calculate</button>
     </div>
   </div>
 </template>

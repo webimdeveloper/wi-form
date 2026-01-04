@@ -19,8 +19,8 @@ function onBack() {
     <WiFormSummary :summary="results" />
 
     <div class="wi_step__actions">
-      <button class="wi_btn wi_btn--secondary" type="button" @click="onBack">Back</button>
-      <a class="wi_btn wi_btn--primary" :href="redirectUrl || '#'">Continue</a>
+      <button class="wi_btn wi_btn--secondary wi_btn-to-back" type="button" @click="onBack">← Back</button>
+      <a class="wi_btn wi_btn--primary wi_btn-to-contact" :href="redirectUrl || '#'">Get a proposal</a>
     </div>
   </div>
 </template>

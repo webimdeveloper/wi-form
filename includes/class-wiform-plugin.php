@@ -151,7 +151,7 @@ class WiForm_Plugin {
 		if ( ! empty( $atts['redirectUrl'] ) ) {
 			$settings['redirectUrl'] = esc_url_raw( $atts['redirectUrl'] );
 		} else {
-			$settings['redirectUrl'] = 'https://example.com/next';
+			$settings['redirectUrl'] = '/contacts';
 		}
 
 		// Make settings available to JS as window.wiformTrademarkSettings

@@ -1,15 +1,15 @@
-.wi_summary {
+/* .wi_summary {
   display: grid;
   gap: var(--wi_space-sm);
   grid-template-columns: repeat(12, minmax(0, 1fr));
-}
+} */
 
 .wi_card {
-  grid-column: span 12;
+  /* grid-column: span 12;
   border: 1px solid var(--wi_color-border);
-  border-radius: var(--wi_radius-md);
+  border-radius: var(--wi_radius-md); */
   padding: var(--wi_space-md);
-  background: var(--wi_color-surface-muted);
+  background: #fff;
 }
 
 .wi_card__title {

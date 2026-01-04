@@ -1,19 +1,20 @@
 .wi_shell {
   border: 1px solid var(--wi_color-border);
-  border-radius: var(--wi_radius-md);
-  padding: var(--wi_space-lg);
+  border-radius: var(--wi_radius-0);
+  padding-block: var(--wi_padding-block);
+  padding-inline: var(--wi_padding-inline);
   background: var(--wi_color-surface);
-  box-shadow: var(--wi_shadow-sm);
+  /*box-shadow: var(--wi_shadow-sm);*/
   display: flex;
   flex-direction: column;
   gap: var(--wi_space-lg);
 }
 
-.wi_section {
+/* .wi_section {
   display: flex;
   flex-direction: column;
   gap: var(--wi_space-sm);
-}
+} */
 
 .wi_section__heading {
   display: flex;
