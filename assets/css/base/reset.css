@@ -1,0 +1,44 @@
+/* Aggressive reset to isolate from WP themes */
+.wi_root button,
+.wi_root input,
+.wi_root select,
+.wi_root textarea {
+  all: unset; /* The nuclear option: resets everything to initial/inherit */
+  box-sizing: border-box; /* Re-apply essential defaults */
+  font: inherit;
+  color: inherit;
+}
+
+/* Re-apply needed defaults after 'all: unset' */
+.wi_root button {
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+}
+
+.wi_root input[type="radio"] {
+    /* Radios often need browser defaults or specific styling, 'all: unset' might be too strong for them if we don't fully restyle. 
+       However, WiForm seems to use custom styled radios or standard ones. 
+       If standard, we might need to be careful. usage: <input type="radio" ...> 
+    */
+    all: revert; /* Revert to browser default for radio/checkbox if we don't have custom appearance code */
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.wi_root input[type="number"],
+.wi_root input[type="text"],
+.wi_root input[type="email"] {
+  /* Ensure these behave like blocks/inline-blocks */
+  display: inline-block;
+}
+
+/* Explicitly override common theme styles that often leak */
+.wi_root button:focus,
+.wi_root button:hover,
+.wi_root input:focus,
+.wi_root input:hover {
+  outline: none;
+  text-decoration: none;
+}

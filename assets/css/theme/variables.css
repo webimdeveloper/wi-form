@@ -8,12 +8,9 @@
   --wi_color-text-muted: #52606d;
   --wi_color-primary: #E7A529;
   --wi_color-primary-strong: #e19b1b;
-  --wi_color-accent: #10b981;
-  --wi_color-success: #15803d;
   --wi_color-warn: #e75e29;
   --wi_color-error: #e75e29;
   --wi_color-focus: #E7A529;
-  --wi_color-shadow: rgba(31, 41, 51, 0.08);
   --wi_color-border-input: #BCBFCE; 
 
   --wi_color-border-secondary: #696969;
@@ -72,21 +69,4 @@
   /* Transitions */
   --wi_transition-fast: 120ms ease;
   --wi_transition-base: 180ms ease;
-}
-
-.wi_theme-dark {
-  --wi_color-surface: #0f1720;
-  --wi_color-surface-muted: #111827;
-  --wi_color-border: #1f2933;
-  --wi_color-border-strong: #2b3a47;
-  --wi_color-text: #e5eef5;
-  --wi_color-text-muted: #b7c2cc;
-  --wi_color-primary: #60a5fa;
-  --wi_color-primary-strong: #3b82f6;
-  --wi_color-accent: #34d399;
-  --wi_color-success: #22c55e;
-  --wi_color-warn: #f59e0b;
-  --wi_color-error: #ef4444;
-  --wi_color-focus: #60a5fa;
-  --wi_color-shadow: rgba(0, 0, 0, 0.35);
 }

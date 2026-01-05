@@ -12,11 +12,6 @@
   background: #fff;
 }
 
-.wi_card__title {
-  margin: 0 0 var(--wi_space-xs);
-  font-weight: var(--wi_font-weight-semibold);
-  color: var(--wi_color-text);
-}
 
 .wi_stat {
   display: flex;
@@ -45,5 +40,18 @@
     padding-block-start: .7rem;
     /* padding-block-end: 1.4rem; */
     font-style: italic;
+}
+
+.wi_stat > span {
+  font-size: var(--wi_font-size-base);
+  font-style: normal;
+  font-weight: var(--wi_font-weight-regular);
+  line-height: var(--wi_line-height-base);
+  color: var(--wi_color-border-secondary);
+}
+
+.wi_card--totals .wi_stat:last-child > span {
+  font-weight: var(--wi_font-weight-semibold);
+  color: var(--wi_color-text);
 }
 

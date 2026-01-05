@@ -20,8 +20,15 @@ class WiForm_Plugin {
 		// ---------------------------
 		if ( is_admin() ) {
 			add_action( 'admin_menu', [ $this, 'register_admin_menu' ] );
-			add_action( 'admin_init', [ $this, 'register_settings' ] ); // placeholder for future settings.
+			add_action( 'admin_init', [ $this, 'register_settings' ] );
 		}
+		
+		add_action( 'init', [ $this, 'register_polylang_strings' ] );
+
+		// ---------------------------
+		// I18N
+		// ---------------------------
+		load_plugin_textdomain( 'wiform', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 		// ---------------------------
 		// FRONTEND HOOKS
@@ -51,7 +58,56 @@ class WiForm_Plugin {
 	 * Placeholder for settings (will implement later).
 	 */
 	public function register_settings(): void {
-		// Here we will later add settings for BUC/UZS, USD/UZS, company/private coefficients.
+		register_setting( 'wiform_options', 'wiform_usd_to_uzs', [
+			'type'              => 'number',
+			'sanitize_callback' => 'absint',
+			'default'           => 12000,
+		] );
+
+		register_setting( 'wiform_options', 'wiform_service_fee', [
+			'type'              => 'number',
+			'sanitize_callback' => 'absint',
+			'default'           => 200,
+		] );
+
+		add_settings_section(
+			'wiform_main_section',
+			__( 'Currency Settings', 'wiform' ),
+			null,
+			'wiform'
+		);
+
+		add_settings_field(
+			'wiform_usd_to_uzs',
+			__( 'USD to UZS Rate', 'wiform' ),
+			[ $this, 'render_usd_to_uzs_field' ],
+			'wiform',
+			'wiform_main_section'
+		);
+
+		add_settings_field(
+			'wiform_service_fee',
+			__( 'Service Fee (USD)', 'wiform' ),
+			[ $this, 'render_service_fee_field' ],
+			'wiform',
+			'wiform_main_section'
+		);
+	}
+
+	public function render_usd_to_uzs_field(): void {
+		$value = get_option( 'wiform_usd_to_uzs', 12000 );
+		?>
+		<input type="number" name="wiform_usd_to_uzs" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
+		<p class="description"><?php esc_html_e( 'Current exchange rate from 1 USD to UZS.', 'wiform' ); ?></p>
+		<?php
+	}
+
+	public function render_service_fee_field(): void {
+		$value = get_option( 'wiform_service_fee', 200 );
+		?>
+		<input type="number" name="wiform_service_fee" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
+		<p class="description"><?php esc_html_e( 'Base service fee in USD per trademark.', 'wiform' ); ?></p>
+		<?php
 	}
 
 	/**
@@ -63,9 +119,14 @@ class WiForm_Plugin {
 		}
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'WiForm – Dashboard', 'wiform' ); ?></h1>
-			<p><?php esc_html_e( 'This is the main admin screen. The form builder UI will go here later.', 'wiform' ); ?></p>
-			<p><?php esc_html_e( 'Trademark calculator settings will be added soon.', 'wiform' ); ?></p>
+			<h1><?php esc_html_e( 'WiForm Calculator Settings', 'wiform' ); ?></h1>
+			<form action="options.php" method="post">
+				<?php
+				settings_fields( 'wiform_options' );
+				do_settings_sections( 'wiform' );
+				submit_button();
+				?>
+			</form>
 		</div>
 		<?php
 	}
@@ -108,24 +169,27 @@ class WiForm_Plugin {
 		wp_enqueue_script( 'wiform-frontend' );
 
 		// Default settings (later we will override from admin settings).
+		$service_fee = (float) get_option( 'wiform_service_fee', 200 );
+
 		$defaults = [
 			'buc_to_uzs' => 412000,
-			'usd_to_uzs' => 12000,
-			'usd_to_kzt' => 505,
+			'usd_to_uzs' => (int) get_option( 'wiform_usd_to_uzs', 12000 ),
 			'company'    => [
 				'submit_first'       => 6.0,
 				'submit_additional'  => 1.0,
 				'cert_first'         => 11.6,
 				'cert_additional'    => 4.0,
-				'service_per_tm_usd' => 200.0,
+				'service_per_tm_usd' => $service_fee,
 			],
 			'private'    => [
 				'submit_first'       => 4.0,
 				'submit_additional'  => 0.5,
 				'cert_first'         => 6.8,
 				'cert_additional'    => 1.0,
-				'service_per_tm_usd' => 200.0,
+
+				'service_per_tm_usd' => $service_fee,
 			],
+			'labels'     => $this->get_frontend_labels(),
 		];
 
 		// Allow shortcode attributes: 'redirectUrl' and an optional JSON 'settings' to override defaults.
@@ -176,5 +240,53 @@ class WiForm_Plugin {
 
 		<?php
 		return ob_get_clean();
+	}
+
+	public function register_polylang_strings(): void {
+		if ( ! function_exists( 'pll_register_string' ) ) {
+			return;
+		}
+
+		foreach ( $this->get_raw_labels() as $key => $label ) {
+			pll_register_string( $key, $label, 'wiform', false );
+		}
+	}
+
+	public function get_frontend_labels(): array {
+		$raw    = $this->get_raw_labels();
+		$labels = [];
+
+		foreach ( $raw as $key => $text ) {
+			if ( function_exists( 'pll__' ) ) {
+				$labels[ $key ] = pll__( $text );
+			} else {
+				$labels[ $key ] = __( $text, 'wiform' );
+			}
+		}
+
+		return $labels;
+	}
+
+	private function get_raw_labels(): array {
+		return [
+			'choose_applicant_type' => 'Choose applicant type',
+			'legal_entity'          => 'Legal entity',
+			'individual'            => 'Individual',
+			'specify_details'       => 'Specify details',
+			'trademarks'            => 'Trademarks',
+			'classes'               => 'Classes',
+			'total_classes'         => 'Total classes',
+			'state_fee_filing'      => 'State fee for filing',
+			'state_fee_cert'        => 'State fee for TM certificate',
+			'total_state_fee'       => 'Total state fee',
+			'service'               => 'Service',
+			'total'                 => 'Total',
+			'request_proposal'      => 'Request proposal',
+			'applicant_type'        => 'Applicant type',
+			'add_another_trademark' => 'Add another trademark',
+			'number_of_classes'     => 'Number of classes',
+			'back'                  => '← Back',
+			'note_text'             => 'The stated price is for reference only and does not guarantee the final cost. The final price will be agreed upon and approved separately.',
+		];
 	}
 }

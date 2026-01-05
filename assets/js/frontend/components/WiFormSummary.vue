@@ -15,7 +15,9 @@ const props = defineProps({
     }),
   },
   currency: { type: String, default: 'USD' },
-  rate: { type: Number, default: 480 },
+
+  rate: { type: Number, default: 12000 },
+  config: { type: Object, default: () => ({}) },
 });
 
 const emit = defineEmits(['update:currency']);
@@ -29,8 +31,8 @@ const formatter = computed(() => {
       maximumFractionDigits: 0,
     });
   }
-  // KZT use decimal with comma
-  return new Intl.NumberFormat('en-US', {
+  // UZS use decimal
+  return new Intl.NumberFormat('ru-RU', {
     style: 'decimal',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
@@ -38,13 +40,19 @@ const formatter = computed(() => {
 });
 
 function getValue(usdValue) {
-  if (props.currency === 'KZT') {
+  if (props.currency === 'UZS') {
     return usdValue * props.rate;
   }
   return usdValue;
 }
 
 // Computed properties for each total
+const formattedStateDutySubmit = computed(() =>
+  formatter.value.format(getValue(props.summary.totals.stateDutySubmitUSD || 0))
+);
+const formattedStateDutyCert = computed(() =>
+  formatter.value.format(getValue(props.summary.totals.stateDutyCertUSD || 0))
+);
 const formattedStateDuty = computed(() =>
   formatter.value.format(getValue(props.summary.totals.stateDutyUSD))
 );
@@ -54,6 +62,17 @@ const formattedService = computed(() =>
 const formattedTotal = computed(() =>
   formatter.value.format(getValue(props.summary.totals.totalUSD))
 );
+
+const formattedClasses = computed(() => {
+  const total = props.summary.classes;
+  const counts = props.summary.classCounts || [];
+  
+  if (counts.length > 1) {
+    const breakdown = counts.join(' + ');
+    return `${total} <span class="wi_stat__breakdown">(${breakdown})</span>`;
+  }
+  return total;
+});
 
 function onCurrencyChange(e) {
   emit('update:currency', e.target.value);
@@ -77,12 +96,12 @@ function onCurrencyChange(e) {
   <input
     type="radio"
     name="currency"
-    value="KZT"
-    id="currency-kzt"
-    :checked="currency === 'KZT'"
+    value="UZS"
+    id="currency-uzs"
+    :checked="currency === 'UZS'"
     @change="onCurrencyChange"
   />
-  <label for="currency-kzt">KZT</label>
+  <label for="currency-uzs">UZS</label>
 </div>
 
 
@@ -92,36 +111,44 @@ function onCurrencyChange(e) {
     <div class="wi_card wi_card--totals">
       <!-- <p class="wi_card__title">Totals</p> -->
       <div class="wi_stat">
-        <span class="wi_stat__label">Applicant type:</span>
+        <span class="wi_stat__label">{{ config.labels?.applicant_type || 'Applicant type:' }}</span>
         <span class="wi_stat__value">{{
-          summary.mode === "company" ? "Company" : "Private person"
+          summary.mode === "company" 
+            ? (config.labels?.legal_entity || "Legal entity") 
+            : (config.labels?.individual || "Individual")
         }}</span>
       </div>
       <div class="wi_stat">
-        <span class="wi_stat__label">Total trademarks:</span>
+        <span class="wi_stat__label">{{ config.labels?.trademarks || 'Trademarks:' }}</span>
         <span class="wi_stat__value">{{ summary.trademarks }}</span>
       </div>
       <div class="wi_stat">
-        <span class="wi_stat__label">Total classes:</span>
-        <span class="wi_stat__value">{{ summary.classes }}</span>
+        <span class="wi_stat__label">{{ config.labels?.total_classes || 'Total classes:' }}</span>
+        <span class="wi_stat__value" v-html="formattedClasses"></span>
       </div>
       <div class="wi_stat">
-        <span class="wi_stat__label">State duty:</span>
+        <span class="wi_stat__label">{{ config.labels?.state_fee_filing || 'State fee for filing:' }}</span>
+        <span class="wi_stat__value">{{ formattedStateDutySubmit }} {{ currency }}</span>
+      </div>
+      <div class="wi_stat">
+        <span class="wi_stat__label">{{ config.labels?.state_fee_cert || 'State fee for TM certificate:' }}</span>
+        <span class="wi_stat__value">{{ formattedStateDutyCert }} {{ currency }}</span>
+      </div>
+      <div class="wi_stat">
+        <span class="wi_stat__label">{{ config.labels?.total_state_fee || 'Total state fee:' }}</span>
         <span class="wi_stat__value">{{ formattedStateDuty }} {{ currency }}</span>
       </div>
       <div class="wi_stat">
-        <span class="wi_stat__label">Service:</span>
+        <span class="wi_stat__label">{{ config.labels?.service || 'Service:' }}</span>
         <span class="wi_stat__value">{{ formattedService }} {{ currency }}</span>
       </div>
       <div class="wi_stat">
-        <span class="wi_stat__label">Total:<sup>*</sup></span>
+        <span class="wi_stat__label">{{ config.labels?.total || 'Total:' }}<sup>*</sup></span>
         <span class="wi_stat__value">{{ formattedTotal }} {{ currency }}</span>
       </div>
     </div>
     <p class="wi_p-note">
-      <sup>*</sup> The stated price is for reference only and does not guarantee
-      the final cost. The final price will be agreed upon and approved
-      separately.
+      <sup>*</sup> {{ config.labels?.note_text || 'The stated price is for reference only and does not guarantee the final cost.' }}
     </p>
   </div>
 </template>

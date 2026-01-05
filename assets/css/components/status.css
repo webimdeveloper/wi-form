@@ -9,11 +9,6 @@
   gap: var(--wi_space-xs);
 }
 
-.wi_status--success {
-  border-color: color-mix(in srgb, var(--wi_color-success) 40%, var(--wi_color-border));
-  background: color-mix(in srgb, var(--wi_color-success) 10%, var(--wi_color-surface-muted));
-  color: var(--wi_color-success);
-}
 
 .wi_status--warn {
   border-color: color-mix(in srgb, var(--wi_color-warn) 40%, var(--wi_color-border));

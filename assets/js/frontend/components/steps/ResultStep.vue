@@ -25,13 +25,13 @@ function onBack() {
     <WiFormSummary
       :summary="results"
       :currency="currency"
-      :rate="config.usd_to_kzt || 505"
+      :rate="config.usd_to_uzs || 12000"
       @update:currency="onUpdateCurrency"
     />
 
     <div class="wi_step__actions">
-      <button class="wi_btn wi_btn--secondary wi_btn-to-back" type="button" @click="onBack">← Back</button>
-      <a class="wi_btn wi_btn--primary wi_btn-to-contact" :href="redirectUrl || '#'">Get a proposal</a>
+      <button class="wi_btn wi_btn--secondary wi_btn-to-back" type="button" @click="onBack">{{ config.labels?.back || '← Back' }}</button>
+      <a class="wi_btn wi_btn--primary wi_btn-to-contact" :href="redirectUrl || '#'">{{ config.labels?.request_proposal || 'Request proposal' }}</a>
     </div>
   </div>
 </template>

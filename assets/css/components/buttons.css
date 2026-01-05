@@ -43,3 +43,27 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* Button Helpers */
+
+.wi_root .wi_btn-to-contact {
+  flex: 1 0 auto;
+  border-radius: var(--wi_radius-0);
+  padding: var(--wi_space-md) var(--wi_space-lg);
+  font-size: var(--wi_font-size-base);
+  font-style: normal;
+  font-weight: var(--wi_font-weight-medium);
+  line-height: inherit;
+}
+
+.wi_root .wi_btn-to-back {
+  font-size: var(--wi_font-size-base);
+  border: none;
+  color: var(--wi_color-primary);
+  background-color: transparent;
+}
+
+.wi_root .wi_btn-to-back:hover {
+  background-color: transparent;
+  color: var(--wi_color-primary-strong);
+}

@@ -87,7 +87,7 @@ function finalizeClasses(id, value) {
       <div class="wi_inputs__group">
         <fieldset class="wi_inputs__fieldset" :class="{ wi_error: showError }">
           <legend class="wi_row__label wi_row_title">
-            Select applicant type:
+            {{ config.labels ? config.labels.choose_applicant_type : 'Choose applicant type:' }}
             <span class="wi_required" aria-label="required">*</span>
           </legend>
           <div class="wi_inputs__radio-group">
@@ -99,7 +99,7 @@ function finalizeClasses(id, value) {
                 :checked="mode === 'company'"
                 @change="setMode('company')"
               />
-              <span>Company</span>
+              <span>{{ config.labels ? config.labels.legal_entity : 'Legal entity' }}</span>
             </label>
             <label class="wi_inputs__radio-label">
               <input
@@ -109,14 +109,14 @@ function finalizeClasses(id, value) {
                 :checked="mode === 'private'"
                 @change="setMode('private')"
               />
-              <span>Private person</span>
+              <span>{{ config.labels ? config.labels.individual : 'Individual' }}</span>
             </label>
           </div>
         </fieldset>
       </div>
 
       <div class="wi_inputs__group">
-        <span class="wi_row__label  wi_row_title">Specify trademark details:</span>
+        <span class="wi_row__label  wi_row_title">{{ config.labels ? config.labels.specify_details : 'Specify details:' }}</span>
         <div class="wi_inputs__rows">
           <div class="wi_row" v-for="(row, index) in rows" :key="row.id">
             <div class="wi_row__group-label">
