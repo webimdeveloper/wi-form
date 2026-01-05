@@ -22,7 +22,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--wi_space-xs) 0;
+  padding: var(--wi_space-sm) 0;
   border-bottom: 1px solid color-mix(in srgb, var(--wi_color-border) 60%, transparent);
 }
 
@@ -39,5 +39,11 @@
   color: var(--wi_color-text);
 }
 
-/* Both totals and notes stretch full width for now */
+.wi_summary .wi_p-note{
+    font-size: 13px;
+    line-height: 18px;
+    padding-block-start: .7rem;
+    /* padding-block-end: 1.4rem; */
+    font-style: italic;
+}
 

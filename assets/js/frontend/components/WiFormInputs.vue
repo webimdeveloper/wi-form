@@ -73,7 +73,7 @@ function updateClasses(id, value) {
       <div class="wi_inputs__group">
         <fieldset class="wi_inputs__fieldset" :class="{ wi_error: showError }">
           <legend class="wi_row__label wi_row_title">
-            Select applicant type below:
+            Select applicant type:
             <span class="wi_required" aria-label="required">*</span>
           </legend>
           <div class="wi_inputs__radio-group">
