@@ -52,18 +52,32 @@ function removeRow(id) {
 }
 
 function updateClasses(id, value) {
-  // Clamp value between MIN_CLASSES and MAX_CLASSES
-  let clamped = Number(value);
-  if (!Number.isFinite(clamped)) {
-    clamped = MIN_CLASSES;
-  } else {
-    clamped = Math.max(MIN_CLASSES, Math.min(MAX_CLASSES, clamped));
-  }
-
+  // Allow temporary empty or out-of-bounds values while typing
+  // We just update the state directly to what the user typed (if it's a number-ish)
+  // But we won't clamp strictly yet, unless it's obviously bad logic.
+  // Actually, for a controlled input, we should probably pass the raw value.
+  // BUT the prop expectation might be Number.
+  // Let's rely on the fact that if they clear it, value is 0 or empty.
+  
+  // If we just emit, the parent updates the row. 
+  // We shouldn't clamp here if we want to allow "deletion" (which results in empty/0).
   const clone = props.rows.map((row) =>
-    row.id === id ? { ...row, classes: clamped } : row
+    row.id === id ? { ...row, classes: value } : row
   );
   emit("update:rows", clone);
+}
+
+function finalizeClasses(id, value) {
+  // Enforce constraints on blur
+  let clamped = Number(value);
+  if (!Number.isFinite(clamped) || clamped < MIN_CLASSES) {
+    clamped = MIN_CLASSES;
+  } else if (clamped > MAX_CLASSES) {
+    clamped = MAX_CLASSES;
+  }
+  
+  // Only emit if different
+  updateClasses(id, clamped);
 }
 </script>
 
@@ -119,7 +133,8 @@ function updateClasses(id, value) {
                 :min="MIN_CLASSES"
                 :max="MAX_CLASSES"
                 :value="row.classes"
-                @input="updateClasses(row.id, Number($event.target.value))"
+                @input="updateClasses(row.id, $event.target.value)"
+                @blur="finalizeClasses(row.id, $event.target.value)"
               />
             </div>
             <button

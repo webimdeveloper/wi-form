@@ -14,35 +14,74 @@ const props = defineProps({
       },
     }),
   },
+  currency: { type: String, default: 'USD' },
+  rate: { type: Number, default: 480 },
 });
 
-const formatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  minimumFractionDigits: 0, // Set to 2 if you want .00 always
-  maximumFractionDigits: 0,
+const emit = defineEmits(['update:currency']);
+
+const formatter = computed(() => {
+  if (props.currency === 'USD') {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+  }
+  // KZT use decimal with comma
+  return new Intl.NumberFormat('en-US', {
+    style: 'decimal',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
 });
+
+function getValue(usdValue) {
+  if (props.currency === 'KZT') {
+    return usdValue * props.rate;
+  }
+  return usdValue;
+}
 
 // Computed properties for each total
 const formattedStateDuty = computed(() =>
-  formatter.format(props.summary.totals.stateDutyUSD)
+  formatter.value.format(getValue(props.summary.totals.stateDutyUSD))
 );
 const formattedService = computed(() =>
-  formatter.format(props.summary.totals.serviceUSD)
+  formatter.value.format(getValue(props.summary.totals.serviceUSD))
 );
 const formattedTotal = computed(() =>
-  formatter.format(props.summary.totals.totalUSD)
+  formatter.value.format(getValue(props.summary.totals.totalUSD))
 );
+
+function onCurrencyChange(e) {
+  emit('update:currency', e.target.value);
+}
 </script>
 
 <template>
   <div class="wi_summary">
 
 <div class="wi_currency-toggle">
-  <input type="radio" name="currency" value="USD" id="currency-usd" checked />
+  <input
+    type="radio"
+    name="currency"
+    value="USD"
+    id="currency-usd"
+    :checked="currency === 'USD'"
+    @change="onCurrencyChange"
+  />
   <label for="currency-usd">USD</label>
 
-  <input type="radio" name="currency" value="KZT" id="currency-kzt" />
+  <input
+    type="radio"
+    name="currency"
+    value="KZT"
+    id="currency-kzt"
+    :checked="currency === 'KZT'"
+    @change="onCurrencyChange"
+  />
   <label for="currency-kzt">KZT</label>
 </div>
 
@@ -68,15 +107,15 @@ const formattedTotal = computed(() =>
       </div>
       <div class="wi_stat">
         <span class="wi_stat__label">State duty:</span>
-        <span class="wi_stat__value">{{ formattedStateDuty }} USD</span>
+        <span class="wi_stat__value">{{ formattedStateDuty }} {{ currency }}</span>
       </div>
       <div class="wi_stat">
         <span class="wi_stat__label">Service:</span>
-        <span class="wi_stat__value">{{ formattedService }} USD</span>
+        <span class="wi_stat__value">{{ formattedService }} {{ currency }}</span>
       </div>
       <div class="wi_stat">
         <span class="wi_stat__label">Total:<sup>*</sup></span>
-        <span class="wi_stat__value">{{ formattedTotal }} USD</span>
+        <span class="wi_stat__value">{{ formattedTotal }} {{ currency }}</span>
       </div>
     </div>
     <p class="wi_p-note">

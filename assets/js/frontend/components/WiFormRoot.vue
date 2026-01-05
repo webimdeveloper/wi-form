@@ -18,6 +18,7 @@ const props = defineProps({
 const formState = reactive({
   mode: null, // no default; user must select company or private
   rows: [{ id: 'row-1', classes: 1 }],
+  currency: 'USD',
 });
 
 const currentStep = ref(0); // 0 = form, 1 = result
@@ -29,6 +30,10 @@ function handleMode(nextMode) {
 
 function handleRows(nextRows) {
   formState.rows = nextRows;
+}
+
+function handleCurrency(nextCurrency) {
+  formState.currency = nextCurrency;
 }
 
 function handleNext() {
@@ -60,8 +65,11 @@ function handleBack() {
       <!-- <h2 class="wi_section__heading">Results</h2> -->
       <ResultStep
         :results="results"
+        :config="config"
+        :currency="formState.currency"
         :redirectUrl="config?.redirectUrl"
         @back="handleBack"
+        @update:currency="handleCurrency"
       />
     </div>
   </div>

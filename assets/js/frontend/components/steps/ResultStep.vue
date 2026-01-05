@@ -4,10 +4,16 @@ import WiFormSummary from '../WiFormSummary.vue';
 
 const props = defineProps({
   results: { type: Object, required: true },
+  config: { type: Object, default: () => ({}) },
+  currency: { type: String, default: 'USD' },
   redirectUrl: { type: String, default: '' },
 });
 
-const emit = defineEmits(['back']);
+const emit = defineEmits(['back', 'update:currency']);
+
+function onUpdateCurrency(val) {
+  emit('update:currency', val);
+}
 
 function onBack() {
   emit('back');
@@ -16,7 +22,12 @@ function onBack() {
 
 <template>
   <div class="wi_step wi_step--result">
-    <WiFormSummary :summary="results" />
+    <WiFormSummary
+      :summary="results"
+      :currency="currency"
+      :rate="config.usd_to_kzt || 505"
+      @update:currency="onUpdateCurrency"
+    />
 
     <div class="wi_step__actions">
       <button class="wi_btn wi_btn--secondary wi_btn-to-back" type="button" @click="onBack">← Back</button>

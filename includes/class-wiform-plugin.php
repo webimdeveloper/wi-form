@@ -111,6 +111,7 @@ class WiForm_Plugin {
 		$defaults = [
 			'buc_to_uzs' => 412000,
 			'usd_to_uzs' => 12000,
+			'usd_to_kzt' => 505,
 			'company'    => [
 				'submit_first'       => 6.0,
 				'submit_additional'  => 1.0,
