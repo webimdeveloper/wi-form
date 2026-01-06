@@ -193,9 +193,10 @@ class WiForm_Plugin {
 		];
 
 		// Allow shortcode attributes: 'redirectUrl' and an optional JSON 'settings' to override defaults.
+		// Note: WP lowercases all shortcode attributes, so we must match 'redirecturl'.
 		$atts = shortcode_atts(
 			[
-				'redirectUrl' => '',
+				'redirecturl' => '',
 				'settings'    => '',
 			],
 			$atts,
@@ -213,8 +214,8 @@ class WiForm_Plugin {
 		}
 
 		// redirectUrl may be provided as an attribute; otherwise use a sensible default.
-		if ( ! empty( $atts['redirectUrl'] ) ) {
-			$settings['redirectUrl'] = esc_url_raw( $atts['redirectUrl'] );
+		if ( ! empty( $atts['redirecturl'] ) ) {
+			$settings['redirectUrl'] = esc_url_raw( $atts['redirecturl'] );
 		} else {
 			$settings['redirectUrl'] = '/contacts';
 		}
