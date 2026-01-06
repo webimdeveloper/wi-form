@@ -3,11 +3,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--wi_space-sm) var(--wi_space-md);
-  border-radius: var(--wi_radius-md);
+  padding: var(--wi_space-md) var(--wi_space-lg);
+  border-radius: var(--wi_radius-0);
+  font-size: var(--wi_font-size-base);
+  font-style: normal;
   font-weight: var(--wi_font-weight-medium);
   text-decoration: none;
-  transition: background-color var(--wi_transition-fast), border-color var(--wi_transition-fast), color var(--wi_transition-fast), box-shadow var(--wi_transition-fast);
+  transition: background-color var(--wi_transition-fast),
+    border-color var(--wi_transition-fast), color var(--wi_transition-fast),
+    box-shadow var(--wi_transition-fast);
   border: 1px solid transparent;
   cursor: pointer;
 }

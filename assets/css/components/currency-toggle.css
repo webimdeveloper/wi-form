@@ -8,12 +8,11 @@
   z-index: 1;
   font-size: 13px;
   font-weight: 500;
-  border: 1px solid #fff;
   color: var(--wi_color-primary);
 }
 
 .wi_currency-toggle > input {
-  display: none;
+  display: none !important;
 }
 
 .wi_currency-toggle label {

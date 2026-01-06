@@ -26,6 +26,7 @@ function onBack() {
       :summary="results"
       :currency="currency"
       :rate="config.usd_to_uzs || 12000"
+      :config="config"
       @update:currency="onUpdateCurrency"
     />
 

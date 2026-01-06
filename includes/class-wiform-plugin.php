@@ -274,7 +274,6 @@ class WiForm_Plugin {
 			'individual'            => 'Individual',
 			'specify_details'       => 'Specify details',
 			'trademarks'            => 'Trademarks',
-			'classes'               => 'Classes',
 			'total_classes'         => 'Total classes',
 			'state_fee_filing'      => 'State fee for filing',
 			'state_fee_cert'        => 'State fee for TM certificate',
@@ -287,6 +286,8 @@ class WiForm_Plugin {
 			'number_of_classes'     => 'Number of classes',
 			'back'                  => '← Back',
 			'note_text'             => 'The stated price is for reference only and does not guarantee the final cost. The final price will be agreed upon and approved separately.',
+			'calculate'             => 'Calculate',
+			'trademark'             => 'Trademark',
 		];
 	}
 }

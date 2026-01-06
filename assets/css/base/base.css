@@ -141,13 +141,13 @@ input[type="number"]::-webkit-inner-spin-button {
   align-items: center;
   justify-content: center;
   padding: var(--wi_space-sm) var(--wi_space-md);
-  border-radius: var(--wi_radius-md);
+  /* border-radius: var(--wi_radius-md); */
   font-weight: var(--wi_font-weight-medium);
   text-decoration: none;
   transition: background-color var(--wi_transition-fast),
     border-color var(--wi_transition-fast), color var(--wi_transition-fast),
     box-shadow var(--wi_transition-fast);
-  border: 1px solid transparent;
+  /* border: 1px solid transparent; */
   cursor: pointer;
 }
 

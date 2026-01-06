@@ -67,7 +67,7 @@
   line-height: normal;
   border-radius: var(--wi_radius-0);
 }
-.wi_actions__add--full:hover {
+.wi_row__control--full:hover {
   background-color: color-mix(
     in srgb,
     var(--wi_color-primary) 8%,
@@ -79,9 +79,11 @@
   margin-top: var(--wi_space-sm);
 }
 
-
 .wi_row__control--full {
+  display: flex;
   flex: 1;
+  border: 1px solid var(--wi_color-primary);
+  padding: var(--wi_space-xs) var(--wi_space-sm);
 }
 
 .wi_row--add .wi_row__action {
@@ -91,9 +93,13 @@
 }
 
 .wi_row__remove {
-  border: 0;
-  background: transparent;
-  aspect-ratio: 1 / 1;
+  border: 0 !important;
+  background: transparent !important;
+  aspect-ratio: 1 / 1 !important;
+  width: 3rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 .wi_row__remove svg {
   color: var(--wi_color-primary);
@@ -161,7 +167,9 @@
   font-style: normal;
   line-height: var(--wi_line-height-base);
 }
-
+.wi_row__label--classes {
+  text-align:right;
+}
 .wi_inputs__radio-label input[type="radio"] {
   cursor: pointer;
   width: var(--wi_space-lg);
@@ -231,4 +239,10 @@
 
 .wi_row_title {
   padding-block-end: var(--wi_space-lg) !important;
+}
+.wi_btn-prm-100 {
+  flex:1 !important;
+}
+.wi_currency-toggle > input {
+    display: none !important;
 }

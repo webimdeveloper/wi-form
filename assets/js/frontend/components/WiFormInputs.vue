@@ -4,7 +4,7 @@ import DeleteIcon from '@/assets/img/delete_icon.svg?component';
 
 // Repeater constraints
 const MAX_ROWS = 5;
-const MAX_CLASSES = 40;
+const MAX_CLASSES = 45;
 const MIN_CLASSES = 1;
 
 const props = defineProps({
@@ -121,10 +121,10 @@ function finalizeClasses(id, value) {
           <div class="wi_row" v-for="(row, index) in rows" :key="row.id">
             <div class="wi_row__group-label">
               <span class="wi_row__label wi_row__label--trademark"
-                >Trademark #{{ index + 1 }}</span
+                >{{ config.labels?.trademark || 'Trademark' }} #{{ index + 1 }}</span
               >
               <span class="wi_row__label wi_row__label--classes"
-                >Number of classes:</span
+                >{{ config.labels?.number_of_classes || 'Number of classes' }}:</span
               >
             </div>
             <div class="wi_row__control wi_row__control--classes">
@@ -159,7 +159,7 @@ function finalizeClasses(id, value) {
                 class="wi_row__action wi_actions__add wi_actions__add--full"
                 @click="addRow()"
               >
-                + Add Trademark
+                + {{ config.labels?.add_another_trademark || 'Add Trademark' }}
               </button>
             </div>
           </div>
