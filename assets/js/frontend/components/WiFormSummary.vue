@@ -47,21 +47,40 @@ function getValue(usdValue) {
 }
 
 // Computed properties for each total
-const formattedStateDutySubmit = computed(() =>
-  formatter.value.format(getValue(props.summary.totals.stateDutySubmitUSD || 0))
-);
-const formattedStateDutyCert = computed(() =>
-  formatter.value.format(getValue(props.summary.totals.stateDutyCertUSD || 0))
-);
-const formattedStateDuty = computed(() =>
-  formatter.value.format(getValue(props.summary.totals.stateDutyUSD))
-);
-const formattedService = computed(() =>
-  formatter.value.format(getValue(props.summary.totals.serviceUSD))
-);
-const formattedTotal = computed(() =>
-  formatter.value.format(getValue(props.summary.totals.totalUSD))
-);
+const formattedStateDutySubmit = computed(() => {
+  const val = props.currency === 'UZS'
+    ? (props.summary.totals.stateDutySubmitUZS ?? (props.summary.totals.stateDutySubmitUSD * props.rate))
+    : props.summary.totals.stateDutySubmitUSD;
+  return formatter.value.format(val);
+});
+
+const formattedStateDutyCert = computed(() => {
+  const val = props.currency === 'UZS'
+    ? (props.summary.totals.stateDutyCertUZS ?? (props.summary.totals.stateDutyCertUSD * props.rate))
+    : props.summary.totals.stateDutyCertUSD;
+  return formatter.value.format(val);
+});
+
+const formattedStateDuty = computed(() => {
+  const val = props.currency === 'UZS'
+    ? (props.summary.totals.stateDutyUZS ?? (props.summary.totals.stateDutyUSD * props.rate))
+    : props.summary.totals.stateDutyUSD;
+  return formatter.value.format(val);
+});
+
+const formattedService = computed(() => {
+  const val = props.currency === 'UZS'
+    ? (props.summary.totals.serviceUZS ?? (props.summary.totals.serviceUSD * props.rate))
+    : props.summary.totals.serviceUSD;
+  return formatter.value.format(val);
+});
+
+const formattedTotal = computed(() => {
+  const val = props.currency === 'UZS'
+    ? (props.summary.totals.totalUZS ?? (props.summary.totals.totalUSD * props.rate))
+    : props.summary.totals.totalUSD;
+  return formatter.value.format(val);
+});
 
 const formattedClasses = computed(() => {
   const total = props.summary.classes;

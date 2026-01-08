@@ -58,23 +58,37 @@ class WiForm_Plugin {
 	 * Placeholder for settings (will implement later).
 	 */
 	public function register_settings(): void {
-		register_setting( 'wiform_options', 'wiform_usd_to_uzs', [
+		register_setting( 'wiform_options', 'wiform_buc_uzs', [
 			'type'              => 'number',
 			'sanitize_callback' => 'absint',
+			'default'           => 412000,
+		] );
+
+		register_setting( 'wiform_options', 'wiform_usd_to_uzs', [
+			'type'              => 'number',
+			'sanitize_callback' => function( $val ) { return (float) $val; },
 			'default'           => 12000,
 		] );
 
 		register_setting( 'wiform_options', 'wiform_service_fee', [
 			'type'              => 'number',
 			'sanitize_callback' => 'absint',
-			'default'           => 200,
+			'default'           => 2407618,
 		] );
 
 		add_settings_section(
 			'wiform_main_section',
-			__( 'Currency Settings', 'wiform' ),
+			__( 'Currency & Fee Settings', 'wiform' ),
 			null,
 			'wiform'
+		);
+
+		add_settings_field(
+			'wiform_buc_uzs',
+			__( 'BUC Value (UZS)', 'wiform' ),
+			[ $this, 'render_buc_uzs_field' ],
+			'wiform',
+			'wiform_main_section'
 		);
 
 		add_settings_field(
@@ -87,26 +101,34 @@ class WiForm_Plugin {
 
 		add_settings_field(
 			'wiform_service_fee',
-			__( 'Service Fee (USD)', 'wiform' ),
+			__( 'Service Fee (UZS)', 'wiform' ),
 			[ $this, 'render_service_fee_field' ],
 			'wiform',
 			'wiform_main_section'
 		);
 	}
 
+	public function render_buc_uzs_field(): void {
+		$value = get_option( 'wiform_buc_uzs', 412000 );
+		?>
+		<input type="number" name="wiform_buc_uzs" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
+		<p class="description"><?php esc_html_e( 'Base Unit Calculation value in UZS.', 'wiform' ); ?></p>
+		<?php
+	}
+
 	public function render_usd_to_uzs_field(): void {
 		$value = get_option( 'wiform_usd_to_uzs', 12000 );
 		?>
-		<input type="number" name="wiform_usd_to_uzs" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
+		<input type="number" step="0.01" name="wiform_usd_to_uzs" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
 		<p class="description"><?php esc_html_e( 'Current exchange rate from 1 USD to UZS.', 'wiform' ); ?></p>
 		<?php
 	}
 
 	public function render_service_fee_field(): void {
-		$value = get_option( 'wiform_service_fee', 200 );
+		$value = get_option( 'wiform_service_fee', 2407618 );
 		?>
 		<input type="number" name="wiform_service_fee" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
-		<p class="description"><?php esc_html_e( 'Base service fee in USD per trademark.', 'wiform' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Base service fee in UZS per trademark.', 'wiform' ); ?></p>
 		<?php
 	}
 
@@ -169,17 +191,19 @@ class WiForm_Plugin {
 		wp_enqueue_script( 'wiform-frontend' );
 
 		// Default settings (later we will override from admin settings).
-		$service_fee = (float) get_option( 'wiform_service_fee', 200 );
+		$service_fee = (float) get_option( 'wiform_service_fee', 2407618 );
+		$buc_uzs     = (int) get_option( 'wiform_buc_uzs', 412000 );
+		$usd_to_uzs  = (float) get_option( 'wiform_usd_to_uzs', 12000 );
 
 		$defaults = [
-			'buc_to_uzs' => 412000,
-			'usd_to_uzs' => (int) get_option( 'wiform_usd_to_uzs', 12000 ),
+			'buc_uzs'    => $buc_uzs,
+			'usd_to_uzs' => $usd_to_uzs,
 			'company'    => [
 				'submit_first'       => 6.0,
 				'submit_additional'  => 1.0,
 				'cert_first'         => 11.6,
 				'cert_additional'    => 4.0,
-				'service_per_tm_usd' => $service_fee,
+				'service_fee_uzs'    => $service_fee,
 			],
 			'private'    => [
 				'submit_first'       => 4.0,
@@ -187,7 +211,7 @@ class WiForm_Plugin {
 				'cert_first'         => 6.8,
 				'cert_additional'    => 1.0,
 
-				'service_per_tm_usd' => $service_fee,
+				'service_fee_uzs'    => $service_fee,
 			],
 			'labels'     => $this->get_frontend_labels(),
 		];

@@ -1,16 +1,15 @@
 export function calculateTotals(configRoot = {}, rows = [], mode = 'company') {
   const cfg = configRoot?.[mode] || {};
-  const bucToUzs = Number(configRoot?.buc_to_uzs) || 412000;
+  const bucUzs = Number(configRoot?.buc_uzs) || 412000;
   const usdToUzs = Number(configRoot?.usd_to_uzs) || 12000;
-  const bucToUsd = bucToUzs / usdToUzs;
+  // Prevent division by zero if rate is missing
+  const exchangeRate = usdToUzs > 0 ? usdToUzs : 12000;
 
-  let totalBUC = 0;
   let totalSubmitBUC = 0;
   let totalCertBUC = 0;
   let classes = 0;
 
   const safeRows = Array.isArray(rows) && rows.length ? rows : [{ id: 'row-1', classes: 1 }];
-
   const classCounts = [];
   
   safeRows.forEach((row) => {
@@ -25,15 +24,24 @@ export function calculateTotals(configRoot = {}, rows = [], mode = 'company') {
     
     totalSubmitBUC += submitBUC;
     totalCertBUC += certBUC;
-    totalBUC += submitBUC + certBUC;
   });
 
-  const stateDutySubmitUSD = Math.round(totalSubmitBUC * bucToUsd);
-  const stateDutyCertUSD = Math.round(totalCertBUC * bucToUsd);
+  // Calculate Base State Duties in UZS
+  const stateDutySubmitUZS = totalSubmitBUC * bucUzs;
+  const stateDutyCertUZS = totalCertBUC * bucUzs;
+  const stateDutyUZS = stateDutySubmitUZS + stateDutyCertUZS;
+
+  // Calculate Service Fee in UZS
+  const servicePerTmUZS = Number(cfg.service_fee_uzs) || 0;
+  const serviceUZS = servicePerTmUZS * safeRows.length;
+  const totalUZS = stateDutyUZS + serviceUZS;
+
+  // Convert to USD and round
+  const stateDutySubmitUSD = Math.round(stateDutySubmitUZS / exchangeRate);
+  const stateDutyCertUSD = Math.round(stateDutyCertUZS / exchangeRate);
   const stateDutyUSD = stateDutySubmitUSD + stateDutyCertUSD;
-  
-  const serviceUSD = Math.round((Number(cfg.service_per_tm_usd) || 0) * safeRows.length);
-  const totalUSD = Math.round(stateDutyUSD + serviceUSD);
+  const serviceUSD = Math.round(serviceUZS / exchangeRate);
+  const totalUSD = Math.round(totalUZS / exchangeRate);
 
   return {
     mode,
@@ -41,11 +49,18 @@ export function calculateTotals(configRoot = {}, rows = [], mode = 'company') {
     classes,
     classCounts,
     totals: {
+      // Primary USD values for display
       stateDutySubmitUSD,
       stateDutyCertUSD,
       stateDutyUSD,
       serviceUSD,
       totalUSD,
+      // Optional: Pass UZS values if needed for debugging/display
+      stateDutySubmitUZS,
+      stateDutyCertUZS,
+      stateDutyUZS,
+      serviceUZS,
+      totalUZS,
     },
   };
 }
