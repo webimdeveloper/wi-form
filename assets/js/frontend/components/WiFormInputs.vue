@@ -148,13 +148,9 @@ function finalizeClasses(id, value) {
               <span class="visually-hidden">Remove trademark row</span>
             </button>
           </div>
-          <div class="wi_row wi_row--add">
-            <!-- <span class="wi_row__label wi_row__label--spacer" aria-hidden="true"
-              >Add Trademark</span
-            > -->
+          <div class="wi_row wi_row--add" v-if="canAddRow">
             <div class="wi_row__control wi_row__control--full">
               <button
-                v-if="canAddRow"
                 type="button"
                 class="wi_row__action wi_actions__add wi_actions__add--full"
                 @click="addRow()"
