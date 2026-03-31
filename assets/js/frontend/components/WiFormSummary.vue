@@ -75,11 +75,37 @@ const formattedService = computed(() => {
   return formatter.value.format(val);
 });
 
+const formattedSearch = computed(() => {
+  const val = props.currency === 'UZS'
+    ? (props.summary.totals.searchUZS ?? (props.summary.totals.searchUSD * props.rate))
+    : (props.summary.totals.searchUSD ?? 0);
+  return formatter.value.format(val);
+});
+
+const formattedAccel = computed(() => {
+  const val = props.currency === 'UZS'
+    ? (props.summary.totals.accelUZS ?? (props.summary.totals.accelUSD * props.rate))
+    : (props.summary.totals.accelUSD ?? 0);
+  return formatter.value.format(val);
+});
+
 const formattedTotal = computed(() => {
   const val = props.currency === 'UZS'
     ? (props.summary.totals.totalUZS ?? (props.summary.totals.totalUSD * props.rate))
     : props.summary.totals.totalUSD;
   return formatter.value.format(val);
+});
+
+const formattedTotalUsdEquivalent = computed(() => {
+  const usdFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+  const totalUZS = props.summary.totals.totalUZS ?? ((props.summary.totals.totalUSD ?? 0) * props.rate);
+  const safeRate = Number(props.rate) > 0 ? Number(props.rate) : 12000;
+  return usdFormatter.format(Math.round(totalUZS / safeRate));
 });
 
 const formattedClasses = computed(() => {
@@ -161,9 +187,21 @@ function onCurrencyChange(e) {
         <span class="wi_stat__label">{{ config.labels?.service || 'Service:' }}</span>
         <span class="wi_stat__value">{{ formattedService }} {{ currency }}</span>
       </div>
+      <div class="wi_stat" v-if="(summary.totals.searchUZS || summary.totals.searchUSD)">
+        <span class="wi_stat__label">{{ config.labels?.search_total || 'Trademark clearance search:' }}</span>
+        <span class="wi_stat__value">{{ formattedSearch }} {{ currency }}</span>
+      </div>
+      <div class="wi_stat" v-if="(summary.totals.accelUZS || summary.totals.accelUSD)">
+        <span class="wi_stat__label">{{ config.labels?.accelerated_total || 'Accelerated examination:' }}</span>
+        <span class="wi_stat__value">{{ formattedAccel }} {{ currency }}</span>
+      </div>
       <div class="wi_stat">
         <span class="wi_stat__label">{{ config.labels?.total || 'Total:' }}<sup>*</sup></span>
         <span class="wi_stat__value">{{ formattedTotal }} {{ currency }}</span>
+      </div>
+      <div class="wi_stat">
+        <span class="wi_stat__label">{{ config.labels?.total_usd_equivalent || 'Total (USD equivalent):' }}</span>
+        <span class="wi_stat__value">{{ formattedTotalUsdEquivalent }} USD</span>
       </div>
     </div>
     <p class="wi_p-note">

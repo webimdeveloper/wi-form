@@ -39,7 +39,7 @@ function addRow() {
   if (!canAddRow.value) return;
 
   const clone = props.rows.map((row) => ({ ...row }));
-  clone.push({ id: `row-${nextRowId.value}`, classes: 1 });
+  clone.push({ id: `row-${nextRowId.value}`, classes: 1, searchEnabled: false, accelEnabled: false, trademarkType: '' });
   emit("update:rows", clone);
 }
 
@@ -63,6 +63,27 @@ function updateClasses(id, value) {
   // We shouldn't clamp here if we want to allow "deletion" (which results in empty/0).
   const clone = props.rows.map((row) =>
     row.id === id ? { ...row, classes: value } : row
+  );
+  emit("update:rows", clone);
+}
+
+function updateRowFlag(id, key, checked) {
+  const clone = props.rows.map((row) => {
+    if (row.id !== id) return row;
+    const next = { ...row, [key]: checked };
+    if (!next.searchEnabled && !next.accelEnabled) {
+      next.trademarkType = '';
+    } else if (!['word', 'fig', 'combined'].includes(next.trademarkType)) {
+      next.trademarkType = 'word';
+    }
+    return next;
+  });
+  emit("update:rows", clone);
+}
+
+function updateTrademarkType(id, value) {
+  const clone = props.rows.map((row) =>
+    row.id === id ? { ...row, trademarkType: value } : row
   );
   emit("update:rows", clone);
 }
@@ -136,6 +157,60 @@ function finalizeClasses(id, value) {
                 @input="updateClasses(row.id, $event.target.value)"
                 @blur="finalizeClasses(row.id, $event.target.value)"
               />
+            </div>
+            <div class="wi_row__options">
+              <label class="wi_inputs__checkbox-label">
+                <input
+                  type="checkbox"
+                  :checked="Boolean(row.searchEnabled)"
+                  @change="updateRowFlag(row.id, 'searchEnabled', $event.target.checked)"
+                />
+                <span>{{ config.labels?.trademark_clearance_search || 'Trademark clearance search' }}</span>
+              </label>
+              <label class="wi_inputs__checkbox-label">
+                <input
+                  type="checkbox"
+                  :checked="Boolean(row.accelEnabled)"
+                  @change="updateRowFlag(row.id, 'accelEnabled', $event.target.checked)"
+                />
+                <span>{{ config.labels?.accelerated_examination || 'Accelerated examination' }}</span>
+              </label>
+
+              <div v-if="row.searchEnabled || row.accelEnabled" class="wi_row__trademark-type">
+                <span class="wi_row__label wi_row__label--type">
+                  {{ config.labels?.trademark_type || 'Trademark type' }}
+                </span>
+                <label class="wi_inputs__radio-label">
+                  <input
+                    type="radio"
+                    :name="`tm-type-${row.id}`"
+                    value="word"
+                    :checked="row.trademarkType === 'word'"
+                    @change="updateTrademarkType(row.id, 'word')"
+                  />
+                  <span>{{ config.labels?.word_trademark || 'Word trademark' }}</span>
+                </label>
+                <label class="wi_inputs__radio-label">
+                  <input
+                    type="radio"
+                    :name="`tm-type-${row.id}`"
+                    value="fig"
+                    :checked="row.trademarkType === 'fig'"
+                    @change="updateTrademarkType(row.id, 'fig')"
+                  />
+                  <span>{{ config.labels?.figurative_trademark || 'Figurative trademark' }}</span>
+                </label>
+                <label class="wi_inputs__radio-label">
+                  <input
+                    type="radio"
+                    :name="`tm-type-${row.id}`"
+                    value="combined"
+                    :checked="row.trademarkType === 'combined'"
+                    @change="updateTrademarkType(row.id, 'combined')"
+                  />
+                  <span>{{ config.labels?.combined_trademark || 'Combined trademark' }}</span>
+                </label>
+              </div>
             </div>
             <button
               v-if="rows.length > 1"

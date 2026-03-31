@@ -17,7 +17,7 @@ const props = defineProps({
 
 const formState = reactive({
   mode: null, // no default; user must select company or private
-  rows: [{ id: 'row-1', classes: 1 }],
+  rows: [{ id: 'row-1', classes: 1, searchEnabled: false, accelEnabled: false, trademarkType: '' }],
   currency: 'USD',
 });
 

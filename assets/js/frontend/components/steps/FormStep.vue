@@ -41,7 +41,10 @@ function onNext() {
   // Ensure all rows have valid class counts (>= 1)
   const allValid = rows.every((row) => {
     const classes = Number(row.classes);
-    return Number.isFinite(classes) && classes >= 1;
+    if (!Number.isFinite(classes) || classes < 1) return false;
+    const hasOptional = Boolean(row.searchEnabled) || Boolean(row.accelEnabled);
+    if (!hasOptional) return true;
+    return ['word', 'fig', 'combined'].includes(row.trademarkType);
   });
 
   if (!allValid) {
