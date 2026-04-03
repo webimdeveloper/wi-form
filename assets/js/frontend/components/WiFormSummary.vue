@@ -96,18 +96,6 @@ const formattedTotal = computed(() => {
   return formatter.value.format(val);
 });
 
-const formattedTotalUsdEquivalent = computed(() => {
-  const usdFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
-  const totalUZS = props.summary.totals.totalUZS ?? ((props.summary.totals.totalUSD ?? 0) * props.rate);
-  const safeRate = Number(props.rate) > 0 ? Number(props.rate) : 12000;
-  return usdFormatter.format(Math.round(totalUZS / safeRate));
-});
-
 const formattedClasses = computed(() => {
   const total = props.summary.classes;
   const counts = props.summary.classCounts || [];
@@ -198,10 +186,6 @@ function onCurrencyChange(e) {
       <div class="wi_stat">
         <span class="wi_stat__label">{{ config.labels?.total || 'Total:' }}<sup>*</sup></span>
         <span class="wi_stat__value">{{ formattedTotal }} {{ currency }}</span>
-      </div>
-      <div class="wi_stat">
-        <span class="wi_stat__label">{{ config.labels?.total_usd_equivalent || 'Total (USD equivalent):' }}</span>
-        <span class="wi_stat__value">{{ formattedTotalUsdEquivalent }} USD</span>
       </div>
     </div>
     <p class="wi_p-note">

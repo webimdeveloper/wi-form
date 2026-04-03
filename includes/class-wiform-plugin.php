@@ -396,15 +396,14 @@ class WiForm_Plugin {
 			'note_text'             => 'The stated price is for reference only and does not guarantee the final cost. The final price will be agreed upon and approved separately.',
 			'calculate'             => 'Calculate',
 			'trademark'             => 'Trademark',
-			'trademark_clearance_search' => 'Trademark clearance search',
-			'accelerated_examination'    => 'Accelerated examination',
-			'trademark_type'             => 'Trademark type',
-			'word_trademark'             => 'Word trademark',
-			'figurative_trademark'       => 'Figurative trademark',
-			'combined_trademark'         => 'Combined trademark',
-			'search_total'               => 'Trademark clearance search',
-			'accelerated_total'          => 'Accelerated examination',
-			'total_usd_equivalent'       => 'Total (USD equivalent)',
+			'trademark_clearance_search' => 'Trademark Search',
+			'accelerated_examination'    => 'Priority Examination',
+			'trademark_type'             => 'Choose type:',
+			'word_trademark'             => 'Word mark',
+			'figurative_trademark'       => 'Logo mark',
+			'combined_trademark'         => 'Combined mark',
+			'search_total'               => 'Trademark Search',
+			'accelerated_total'          => 'Priority Examination',
 		];
 	}
 }

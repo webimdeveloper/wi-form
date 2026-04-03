@@ -41,7 +41,7 @@
   --wi_padding-inline: clamp(
     var(--wi_space-xl),
     -0.5rem + 10vi,
-    var(--wi_space-4xl)
+    var(--wi_space-3xl)
   );
 
   /* Typography */

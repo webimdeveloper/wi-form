@@ -67,6 +67,17 @@ function updateClasses(id, value) {
   emit("update:rows", clone);
 }
 
+function updateClassesByDelta(id, delta) {
+  const clone = props.rows.map((row) => {
+    if (row.id !== id) return row;
+    const current = Number(row.classes);
+    const safeCurrent = Number.isFinite(current) ? current : MIN_CLASSES;
+    const next = Math.min(MAX_CLASSES, Math.max(MIN_CLASSES, safeCurrent + delta));
+    return { ...row, classes: next };
+  });
+  emit("update:rows", clone);
+}
+
 function updateRowFlag(id, key, checked) {
   const clone = props.rows.map((row) => {
     if (row.id !== id) return row;
@@ -79,6 +90,12 @@ function updateRowFlag(id, key, checked) {
     return next;
   });
   emit("update:rows", clone);
+}
+
+function toggleRowFlag(id, key) {
+  const row = props.rows.find((item) => item.id === id);
+  if (!row) return;
+  updateRowFlag(id, key, !Boolean(row[key]));
 }
 
 function updateTrademarkType(id, value) {
@@ -139,90 +156,108 @@ function finalizeClasses(id, value) {
       <div class="wi_inputs__group">
         <span class="wi_row__label  wi_row_title">{{ config.labels ? config.labels.specify_details : 'Specify details:' }}</span>
         <div class="wi_inputs__rows">
-          <div class="wi_row" v-for="(row, index) in rows" :key="row.id">
-            <div class="wi_row__group-label">
-              <span class="wi_row__label wi_row__label--trademark"
-                >{{ config.labels?.trademark || 'Trademark' }} #{{ index + 1 }}</span
-              >
-              <span class="wi_row__label wi_row__label--classes"
-                >{{ config.labels?.number_of_classes || 'Number of classes' }}:</span
-              >
-            </div>
-            <div class="wi_row__control wi_row__control--classes">
-              <input
-                type="number"
-                :min="MIN_CLASSES"
-                :max="MAX_CLASSES"
-                :value="row.classes"
-                @input="updateClasses(row.id, $event.target.value)"
-                @blur="finalizeClasses(row.id, $event.target.value)"
-              />
-            </div>
-            <div class="wi_row__options">
-              <label class="wi_inputs__checkbox-label">
-                <input
-                  type="checkbox"
-                  :checked="Boolean(row.searchEnabled)"
-                  @change="updateRowFlag(row.id, 'searchEnabled', $event.target.checked)"
-                />
-                <span>{{ config.labels?.trademark_clearance_search || 'Trademark clearance search' }}</span>
-              </label>
-              <label class="wi_inputs__checkbox-label">
-                <input
-                  type="checkbox"
-                  :checked="Boolean(row.accelEnabled)"
-                  @change="updateRowFlag(row.id, 'accelEnabled', $event.target.checked)"
-                />
-                <span>{{ config.labels?.accelerated_examination || 'Accelerated examination' }}</span>
-              </label>
+          <transition-group name="wi_tm" tag="div" class="wi_inputs__rows-list">
+          <div class="wi_row wi_row--trademark" v-for="(row, index) in rows" :key="row.id">
+            <div class="wi_row__line wi_row__line--main">
+              <div class="wi_row__header-row">
+                <span class="wi_row__label wi_row__label--trademark">{{ config.labels?.trademark || 'Trademark' }} #{{ index + 1 }}</span>
+                <button
+                  v-if="rows.length > 1"
+                  type="button"
+                  class="wi_row__action wi_row__remove"
+                  @click="removeRow(row.id)"
+                >
+                  <DeleteIcon class="wi_icon--delete" aria-hidden="true" />
+                  <span class="visually-hidden">Remove trademark row</span>
+                </button>
+              </div>
 
-              <div v-if="row.searchEnabled || row.accelEnabled" class="wi_row__trademark-type">
-                <span class="wi_row__label wi_row__label--type">
-                  {{ config.labels?.trademark_type || 'Trademark type' }}
-                </span>
-                <label class="wi_inputs__radio-label">
-                  <input
-                    type="radio"
-                    :name="`tm-type-${row.id}`"
-                    value="word"
-                    :checked="row.trademarkType === 'word'"
-                    @change="updateTrademarkType(row.id, 'word')"
-                  />
-                  <span>{{ config.labels?.word_trademark || 'Word trademark' }}</span>
-                </label>
-                <label class="wi_inputs__radio-label">
-                  <input
-                    type="radio"
-                    :name="`tm-type-${row.id}`"
-                    value="fig"
-                    :checked="row.trademarkType === 'fig'"
-                    @change="updateTrademarkType(row.id, 'fig')"
-                  />
-                  <span>{{ config.labels?.figurative_trademark || 'Figurative trademark' }}</span>
-                </label>
-                <label class="wi_inputs__radio-label">
-                  <input
-                    type="radio"
-                    :name="`tm-type-${row.id}`"
-                    value="combined"
-                    :checked="row.trademarkType === 'combined'"
-                    @change="updateTrademarkType(row.id, 'combined')"
-                  />
-                  <span>{{ config.labels?.combined_trademark || 'Combined trademark' }}</span>
-                </label>
+              <div class="wi_row__classes-row">
+                <span class="wi_row__label wi_row__label--classes">{{ config.labels?.number_of_classes || 'Number of classes' }}:</span>
+                <div class="wi_row__control wi_row__control--classes">
+                  <div class="wi_row__stepper">
+                    <button
+                      type="button"
+                      class="wi_stepper-btn"
+                      :disabled="Number(row.classes) <= MIN_CLASSES"
+                      @click="updateClassesByDelta(row.id, -1)"
+                    >
+                      −
+                    </button>
+                    <input
+                      class="wi_stepper-input"
+                      type="number"
+                      inputmode="numeric"
+                      :min="MIN_CLASSES"
+                      :max="MAX_CLASSES"
+                      :value="row.classes"
+                      @input="updateClasses(row.id, $event.target.value)"
+                      @blur="finalizeClasses(row.id, $event.target.value)"
+                    />
+                    <button
+                      type="button"
+                      class="wi_stepper-btn"
+                      :disabled="Number(row.classes) >= MAX_CLASSES"
+                      @click="updateClassesByDelta(row.id, 1)"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <button
-              v-if="rows.length > 1"
-              type="button"
-              class="wi_row__action wi_row__remove"
-              @click="removeRow(row.id)"
-            >
-              <!-- <span aria-hidden="true">DELETE1</span> -->
-              <DeleteIcon class="wi_icon--delete" aria-hidden="true" />
-              <span class="visually-hidden">Remove trademark row</span>
-            </button>
+            <div class="wi_row__line wi_row__line--options">
+              <div class="wi_row__options">
+                <div class="wi_options__toggle-group">
+                  <button
+                    type="button"
+                    class="wi_option-toggle"
+                    :class="{ 'is-active': Boolean(row.searchEnabled) }"
+                    @click="toggleRowFlag(row.id, 'searchEnabled')"
+                  >
+                    <span class="wi_option-toggle__sign" aria-hidden="true"></span>
+                    <span>{{ config.labels?.trademark_clearance_search || 'Trademark Search' }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="wi_option-toggle"
+                    :class="{ 'is-active': Boolean(row.accelEnabled) }"
+                    @click="toggleRowFlag(row.id, 'accelEnabled')"
+                  >
+                    <span class="wi_option-toggle__sign" aria-hidden="true"></span>
+                    <span>{{ config.labels?.accelerated_examination || 'Priority Examination' }}</span>
+                  </button>
+                </div>
+                <div
+                  class="wi_row__trademark-type-wrap"
+                  :class="{ 'is-open': Boolean(row.searchEnabled || row.accelEnabled) }"
+                  :aria-hidden="!(row.searchEnabled || row.accelEnabled)"
+                >
+                  <div class="wi_row__trademark-type-inner">
+                    <div class="wi_row__trademark-type">
+                      <div class="wi_row__type-row">
+                        <span class="wi_row__label wi_row__label--type">
+                          {{ config.labels?.trademark_type || 'Choose type:' }}
+                        </span>
+                        <select
+                          class="wi_row__type-select"
+                          :value="row.trademarkType || 'word'"
+                          :disabled="!(row.searchEnabled || row.accelEnabled)"
+                          @change="updateTrademarkType(row.id, $event.target.value)"
+                        >
+                          <option value="word">{{ config.labels?.word_trademark || 'Word mark' }}</option>
+                          <option value="fig">{{ config.labels?.figurative_trademark || 'Logo mark' }}</option>
+                          <option value="combined">{{ config.labels?.combined_trademark || 'Combined mark' }}</option>
+                        </select>
+                      </div>
+                      <span class="wi_row__type-note">Type applies to all selected services for this trademark</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+          </transition-group>
           <div class="wi_row wi_row--add" v-if="canAddRow">
             <div class="wi_row__control wi_row__control--full">
               <button

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trademark Registration Cost Calculator</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0ede8;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+  :root {
+    --gold: #C9891A;
+    --gold-light: #F5E6C8;
+    --gold-mid: #E8A530;
+    --gold-bg: #FDF8EF;
+    --gold-border: #E8A530;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f7f5f1;
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #6b6b6b;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.2);
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  .calc-wrap {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    max-width: 640px;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .section-title {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+  }
+  .required-star { color: #C0392B; margin-left: 4px; }
+  .radio-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+  .radio-option {
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+  }
+  .radio-option input[type=radio] { width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
+  .radio-option span { font-size: 15px; color: var(--color-text-primary); }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+  .specify-title { font-size: 17px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; }
+
+  .tm-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .tm-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px 12px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .tm-label-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .tm-tag {
+    font-size: 12px; font-weight: 500;
+    color: var(--gold);
+    background: var(--gold-bg);
+    border: 0.5px solid #E8C97A;
+    border-radius: 20px;
+    padding: 3px 10px;
+    letter-spacing: 0.02em;
+  }
+  .tm-classes-row { display: flex; align-items: center; gap: 8px; }
+  .classes-label { font-size: 13px; color: var(--color-text-secondary); }
+  .stepper {
+    display: flex; align-items: center; gap: 0;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    height: 32px;
+  }
+  .stepper-btn {
+    background: var(--color-background-secondary);
+    border: none; cursor: pointer;
+    width: 30px; height: 32px;
+    font-size: 16px; font-weight: 500;
+    color: var(--gold);
+    transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stepper-btn:hover { background: var(--gold-light); }
+  .stepper-val {
+    width: 32px; height: 32px;
+    text-align: center; line-height: 32px;
+    font-size: 14px; font-weight: 500;
+    color: var(--color-text-primary);
+    border-left: 0.5px solid var(--color-border-tertiary);
+    border-right: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary);
+  }
+  .delete-btn {
+    background: none; border: none; cursor: pointer;
+    padding: 6px; border-radius: var(--border-radius-md);
+    color: var(--color-text-secondary);
+    transition: color 0.15s, background 0.15s;
+    display: flex; align-items: center;
+  }
+  .delete-btn:hover { color: #C0392B; background: #FDEAEA; }
+
+  .tm-addons { padding: 12px 16px; }
+  .addons-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .addon-chip {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid var(--gold-border);
+    border-radius: 20px;
+    padding: 5px 12px 5px 10px;
+    cursor: pointer;
+    background: var(--color-background-primary);
+    font-size: 13px; color: var(--gold);
+    font-weight: 500;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .addon-chip:hover { background: var(--gold-bg); }
+  .addon-chip.active {
+    background: var(--gold-mid);
+    color: #fff;
+    border-color: var(--gold-mid);
+  }
+  .addon-chip .chip-icon {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.18s;
+  }
+  .addon-chip.active .chip-icon {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.6);
+  }
+
+  .type-reveal {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 0.5px solid var(--color-border-tertiary);
+  }
+  .type-reveal.show { display: block; }
+  .type-label {
+    font-size: 12px; color: var(--color-text-secondary);
+    margin-bottom: 6px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .type-select {
+    width: 100%; max-width: 220px;
+    padding: 7px 28px 7px 10px;
+    font-size: 14px;
+    border: 1px solid var(--gold-border);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9891A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+  }
+  .type-select:focus { outline: none; border-color: var(--gold-mid); }
+
+  .type-note {
+    font-size: 12px; color: var(--color-text-secondary);
+    margin-top: 6px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .info-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #f0ede8;
+    border: 0.5px solid rgba(0,0,0,0.15);
+    color: var(--color-text-secondary);
+    font-size: 9px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .add-tm-btn {
+    width: 100%;
+    border: 1px dashed var(--gold-border);
+    background: transparent;
+    border-radius: var(--border-radius-lg);
+    padding: 13px;
+    font-size: 14px; color: var(--gold); font-weight: 500;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-bottom: 1rem;
+    transition: background 0.18s;
+  }
+  .add-tm-btn:hover { background: var(--gold-bg); }
+
+  .calc-btn {
+    width: 100%;
+    background: var(--gold-mid);
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius-lg);
+    padding: 15px;
+    font-size: 16px; font-weight: 500;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.1s;
+    letter-spacing: 0.01em;
+  }
+  .calc-btn:hover { background: var(--gold); }
+  .calc-btn:active { transform: scale(0.99); }
+</style>
+</head>
+<body>
+<div class="calc-wrap">
+  <div class="section-title">Choose applicant type <span class="required-star">*</span></div>
+  <div class="radio-group">
+    <label class="radio-option">
+      <input type="radio" name="applicant" value="legal">
+      <span>Legal entity</span>
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="applicant" value="individual">
+      <span>Individual</span>
+    </label>
+  </div>
+
+  <hr class="divider">
+
+  <div class="specify-title">Specify details</div>
+
+  <div id="tm-list"></div>
+
+  <button class="add-tm-btn" onclick="addTrademark()">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Add another trademark
+  </button>
+
+  <button class="calc-btn">Calculate</button>
+</div>
+
+<script>
+let trademarks = [{ id: 1, classes: 1, search: false, priority: false, type: 'text' }];
+let counter = 1;
+
+function addTrademark() {
+  counter++;
+  trademarks.push({ id: counter, classes: 1, search: false, priority: false, type: 'text' });
+  render();
+}
+
+function removeTrademark(id) {
+  trademarks = trademarks.filter(t => t.id !== id);
+  render();
+}
+
+function updateClasses(id, delta) {
+  const tm = trademarks.find(t => t.id === id);
+  if (!tm) return;
+  tm.classes = Math.max(1, Math.min(20, tm.classes + delta));
+  render();
+}
+
+function toggleAddon(id, addon) {
+  const tm = trademarks.find(t => t.id === id);
+  if (!tm) return;
+  tm[addon] = !tm[addon];
+  render();
+}
+
+function updateType(id, val) {
+  const tm = trademarks.find(t => t.id === id);
+  if (!tm) return;
+  tm.type = val;
+}
+
+function render() {
+  const list = document.getElementById('tm-list');
+  list.innerHTML = '';
+  trademarks.forEach((tm, idx) => {
+    const hasAddon = tm.search || tm.priority;
+    const card = document.createElement('div');
+    card.className = 'tm-card';
+    card.innerHTML = `
+      <div class="tm-card-header">
+        <div class="tm-label-row">
+          <span class="tm-tag">Trademark #${idx + 1}</span>
+          <div class="tm-classes-row">
+            <span class="classes-label">Classes:</span>
+            <div class="stepper">
+              <button class="stepper-btn" onclick="updateClasses(${tm.id}, -1)">−</button>
+              <span class="stepper-val">${tm.classes}</span>
+              <button class="stepper-btn" onclick="updateClasses(${tm.id}, 1)">+</button>
+            </div>
+          </div>
+        </div>
+        ${trademarks.length > 1 ? `<button class="delete-btn" onclick="removeTrademark(${tm.id})" title="Remove">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 4h11M5 4V2.5a.5.5 0 01.5-.5h4a.5.5 0 01.5.5V4M6 7v4M9 7v4M3 4l.8 8.1a.6.6 0 00.6.9h6.2a.6.6 0 00.6-.9L12 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>` : ''}
+      </div>
+      <div class="tm-addons">
+        <div class="addons-row">
+          <button class="addon-chip ${tm.search ? 'active' : ''}" onclick="toggleAddon(${tm.id}, 'search')">
+            <span class="chip-icon">${tm.search ? '✓' : '+'}</span>
+            Trademark Search
+          </button>
+          <button class="addon-chip ${tm.priority ? 'active' : ''}" onclick="toggleAddon(${tm.id}, 'priority')">
+            <span class="chip-icon">${tm.priority ? '✓' : '+'}</span>
+            Priority Examination
+          </button>
+        </div>
+        <div class="type-reveal ${hasAddon ? 'show' : ''}">
+          <div class="type-label">Trademark type</div>
+          <select class="type-select" onchange="updateType(${tm.id}, this.value)">
+            <option value="text" ${tm.type === 'text' ? 'selected' : ''}>Text</option>
+            <option value="figurative" ${tm.type === 'figurative' ? 'selected' : ''}>Figurative (image)</option>
+            <option value="combined" ${tm.type === 'combined' ? 'selected' : ''}>Combined</option>
+          </select>
+          <div class="type-note">
+            <span class="info-dot">i</span>
+            Type applies to all selected services for this trademark
+          </div>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+render();
+</script>
+</body>
+</html>

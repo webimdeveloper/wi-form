@@ -74,5 +74,6 @@ function onNext() {
     <div class="wi_step__actions">
       <button class="wi_btn wi_btn--primary wi_btn-prm-100" type="button" @click="onNext">{{ config.labels?.calculate || 'Calculate' }}</button>
     </div>
+    <p v-if="showError" class="wi_form-error-note">Please choose applicant type above</p>
   </div>
 </template>
