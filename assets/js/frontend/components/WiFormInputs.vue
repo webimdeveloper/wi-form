@@ -250,7 +250,6 @@ function finalizeClasses(id, value) {
                           <option value="combined">{{ config.labels?.combined_trademark || 'Combined mark' }}</option>
                         </select>
                       </div>
-                      <span class="wi_row__type-note">Type applies to all selected services for this trademark</span>
                     </div>
                   </div>
                 </div>
