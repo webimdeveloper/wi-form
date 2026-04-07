@@ -22,6 +22,10 @@ const props = defineProps({
 
 const emit = defineEmits(['update:currency']);
 
+function withColon(label = '') {
+  return String(label || '').replace(/\s*:\s*$/, '') + ':';
+}
+
 const formatter = computed(() => {
   if (props.currency === 'USD') {
     return new Intl.NumberFormat('en-US', {
@@ -176,11 +180,11 @@ function onCurrencyChange(e) {
         <span class="wi_stat__value">{{ formattedService }} {{ currency }}</span>
       </div>
       <div class="wi_stat" v-if="(summary.totals.searchUZS || summary.totals.searchUSD)">
-        <span class="wi_stat__label">{{ config.labels?.search_total || 'Trademark clearance search:' }}</span>
+        <span class="wi_stat__label">{{ withColon(config.labels?.search_total || 'Trademark search') }}</span>
         <span class="wi_stat__value">{{ formattedSearch }} {{ currency }}</span>
       </div>
       <div class="wi_stat" v-if="(summary.totals.accelUZS || summary.totals.accelUSD)">
-        <span class="wi_stat__label">{{ config.labels?.accelerated_total || 'Accelerated examination:' }}</span>
+        <span class="wi_stat__label">{{ withColon(config.labels?.accelerated_total || 'Expedited registration') }}</span>
         <span class="wi_stat__value">{{ formattedAccel }} {{ currency }}</span>
       </div>
       <div class="wi_stat">
